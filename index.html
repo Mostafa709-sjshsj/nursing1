@@ -1,40 +1,52 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nursing Study Hub | منصة التمريض</title>
+    <title>Nursing Study Hub | منصة التمريض الشاملة</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         body {
             font-family: 'Cairo', sans-serif;
-            background-color: #f0fdfa; /* خفيف جداً مائل للأخضر الطبي */
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
         .fade-in {
-            animation: fadeIn 0.4s ease-in-out;
+            animation: fadeIn 0.35s ease-in-out;
         }
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        /* تصميم الـ Scrollbar ليكون متناسق */
+        /* Custom scrollbar */
         ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.05); }
         ::-webkit-scrollbar-thumb { background: #14b8a6; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #0d9488; }
+        
+        /* 3D Flip Card for Flashcards & Memory Game */
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
     </style>
+
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
                         medical: {
                             50: '#f0fdfa',
                             100: '#ccfbf1',
-                            500: '#14b8a6', // لون التمريض الأساسي
+                            200: '#99f6e4',
+                            500: '#14b8a6',
                             600: '#0d9488',
+                            700: '#0f766e',
+                            800: '#115e59',
                             900: '#134e4a',
                         }
                     }
@@ -43,81 +55,96 @@
         }
     </script>
 </head>
-<body class="text-gray-800 min-h-screen flex flex-col">
+<body class="bg-slate-50 dark:bg-slate-900 text-gray-800 dark:text-gray-100 min-h-screen flex flex-col transition-colors duration-300">
 
-    <!-- رسالة الترحيب الشيك (Modal) -->
-    <div id="welcome-modal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-gray-900/60 backdrop-blur-sm transition-opacity duration-300 opacity-0">
-        <div class="bg-white rounded-[2rem] shadow-2xl p-8 max-w-md w-full mx-4 transform scale-95 transition-transform duration-500 text-center relative overflow-hidden border-t-8 border-medical-500">
-            <!-- أيقونة خلفية للتزيين -->
-            <div class="absolute -top-12 -right-12 text-medical-50 opacity-50 text-[10rem]">
+    <div id="welcome-modal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-gray-900/70 backdrop-blur-md transition-opacity duration-300 opacity-0 p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-3xl shadow-2xl p-6 md:p-8 max-w-md w-full text-center relative overflow-hidden border-t-8 border-medical-500 transform scale-95 transition-all duration-300">
+            <div class="absolute -top-12 -right-12 text-medical-50 dark:text-slate-700/30 opacity-50 text-[10rem] pointer-events-none">
                 <i class="fa-solid fa-stethoscope"></i>
             </div>
             
             <div class="relative z-10">
-                <!-- أيقونة الترحيب -->
-                <div class="w-20 h-20 bg-medical-50 rounded-full flex items-center justify-center mx-auto mb-5 shadow-inner">
+                <div class="w-20 h-20 bg-medical-50 dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner">
                     <i class="fa-solid fa-heart-pulse text-4xl text-medical-500 animate-pulse"></i>
                 </div>
                 
-                <h2 class="text-2xl font-extrabold text-medical-900 mb-3">مرحباً بصنّاع الأمل 🤍</h2>
-                <p class="text-gray-600 mb-6 leading-relaxed font-medium text-sm md:text-base">
-                    التمريض ليس مجرد دراسة أو مهنة، بل هو فن العناية بالروح والجسد ورسالة إنسانية عظيمة. فخر كبير أن تكون جزءاً من هذا المجال.
+                <h2 class="text-2xl font-extrabold text-medical-900 dark:text-medical-200 mb-2">مرحباً بصنّاع الأمل 🤍</h2>
+                <p class="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed font-medium text-sm">
+                    التمريض ليس مجرد دراسة، بل هو رسالة إنسانية عظيمة. تم تطوير هذه المنصة لتجعل رحلتك الدراسية ممتعة، منظمة، وفعالة.
                 </p>
                 
-                <!-- العبارة المميزة -->
-                <div class="bg-gradient-to-r from-medical-50 to-teal-50 border border-medical-100 rounded-2xl p-5 mb-8 shadow-sm relative">
-                    <i class="fa-solid fa-quote-right absolute top-3 right-4 text-medical-200 text-2xl opacity-50"></i>
-                    <p class="text-xl md:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-l from-medical-600 to-teal-800 leading-tight mt-2">
+                <div class="bg-gradient-to-r from-medical-50 to-teal-50 dark:from-slate-700 dark:to-slate-700/80 border border-medical-100 dark:border-slate-600 rounded-2xl p-4 mb-6 shadow-sm relative">
+                    <p class="text-lg md:text-xl font-bold text-medical-700 dark:text-medical-300 leading-tight">
                         " يليق بكِ التمريض.. <br> فجمالكِ وحده يداوي ✨ "
                     </p>
                 </div>
                 
-                <button onclick="closeWelcomeModal()" class="w-full bg-gradient-to-l from-medical-500 to-teal-600 hover:from-medical-600 hover:to-teal-700 text-white font-bold py-3.5 px-8 rounded-xl shadow-lg shadow-medical-500/30 transition-all duration-300 transform hover:-translate-y-1">
+                <button onclick="closeWelcomeModal()" class="w-full bg-gradient-to-l from-medical-500 to-teal-600 hover:from-medical-600 hover:to-teal-700 text-white font-bold py-3.5 px-6 rounded-xl shadow-lg shadow-medical-500/30 transition duration-300 transform hover:-translate-y-0.5">
                     ابدأ المذاكرة بشغف <i class="fa-solid fa-arrow-left mr-2"></i>
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- شريط التنقل العلوي -->
-    <nav class="bg-white shadow-md sticky top-0 z-50">
+    <nav class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-gray-100 dark:border-slate-700 transition-colors">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex items-center cursor-pointer" onclick="renderHome()">
-                    <!-- تمت إضافة اللوجو هنا في دائرة صغيرة -->
-                    <img src="https://i.postimg.cc/rsH6Tzxb/Whats-App-Image-2026-10-02-at-9-14-44-PM.jpg" alt="Logo" class="w-10 h-10 rounded-full object-cover ml-3 border-2 border-medical-100 shadow-sm">
-                    <span class="font-bold text-xl text-medical-900">Nurse<span class="text-medical-500">Hub</span></span>
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center cursor-pointer space-x-3 space-x-reverse" onclick="renderHome()">
+                    <img src="https://i.postimg.cc/rsH6Tzxb/Whats-App-Image-2026-10-02-at-9-14-44-PM.jpg" alt="Logo" class="w-10 h-10 rounded-full object-cover border-2 border-medical-500 shadow-sm">
+                    <span class="font-black text-xl text-medical-900 dark:text-white tracking-tight">Nurse<span class="text-medical-500">Hub</span></span>
                 </div>
-                <div class="flex items-center space-x-4 space-x-reverse">
-                    <button onclick="renderHome()" class="text-gray-600 hover:text-medical-600 px-3 py-2 rounded-md font-semibold transition">الرئيسية</button>
-                    <button onclick="renderDictionary()" class="text-gray-600 hover:text-medical-600 px-3 py-2 rounded-md font-semibold transition">قاموس المصطلحات</button>
+
+                <!-- Nav Buttons -->
+                <div class="hidden md:flex items-center space-x-1 space-x-reverse font-bold text-sm">
+                    <button onclick="renderHome()" class="text-gray-700 dark:text-gray-200 hover:text-medical-600 dark:hover:text-medical-400 px-3 py-2 rounded-lg transition"><i class="fa-solid fa-house ml-1.5 text-medical-500"></i>الرئيسية</button>
+                    <button onclick="renderDictionary()" class="text-gray-700 dark:text-gray-200 hover:text-medical-600 dark:hover:text-medical-400 px-3 py-2 rounded-lg transition"><i class="fa-solid fa-book-medical ml-1.5 text-medical-500"></i>القاموس</button>
+                    <button onclick="renderFlashcards()" class="text-gray-700 dark:text-gray-200 hover:text-medical-600 dark:hover:text-medical-400 px-3 py-2 rounded-lg transition"><i class="fa-solid fa-clone ml-1.5 text-medical-500"></i>بطاقات الذاكرة</button>
+                    <button onclick="renderProgress()" class="text-gray-700 dark:text-gray-200 hover:text-medical-600 dark:hover:text-medical-400 px-3 py-2 rounded-lg transition"><i class="fa-solid fa-chart-line ml-1.5 text-medical-500"></i>إنجازي</button>
+                </div>
+
+                <!-- Right Utility Action Buttons -->
+                <div class="flex items-center space-x-2 space-x-reverse">
+                    <!-- Dark Mode Toggle -->
+                    <button onclick="toggleDarkMode()" id="theme-toggle" class="p-2.5 rounded-xl bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-amber-400 hover:bg-gray-200 dark:hover:bg-slate-600 transition" title="تبديل الوضع">
+                        <i class="fa-solid fa-moon text-lg dark:hidden"></i>
+                        <i class="fa-solid fa-sun text-lg hidden dark:inline"></i>
+                    </button>
+
+                    <!-- Mobile Menu Button -->
+                    <button onclick="toggleMobileMenu()" class="md:hidden p-2.5 rounded-xl bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-200">
+                        <i class="fa-solid fa-bars text-lg"></i>
+                    </button>
                 </div>
             </div>
         </div>
+
+        <!-- Mobile Drawer Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 px-4 pt-2 pb-4 space-y-2 font-bold text-sm">
+            <button onclick="renderHome(); toggleMobileMenu();" class="w-full text-right py-2.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700"><i class="fa-solid fa-house ml-2 text-medical-500"></i>الرئيسية</button>
+            <button onclick="renderDictionary(); toggleMobileMenu();" class="w-full text-right py-2.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700"><i class="fa-solid fa-book-medical ml-2 text-medical-500"></i>قاموس المصطلحات</button>
+            <button onclick="renderFlashcards(); toggleMobileMenu();" class="w-full text-right py-2.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700"><i class="fa-solid fa-clone ml-2 text-medical-500"></i>بطاقات الذاكرة (Flashcards)</button>
+            <button onclick="renderProgress(); toggleMobileMenu();" class="w-full text-right py-2.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700"><i class="fa-solid fa-chart-line ml-2 text-medical-500"></i>مستوى الإنجاز</button>
+        </div>
     </nav>
 
-    <!-- منطقة المحتوى الرئيسية التي ستتغير باستخدام الجافاسكريبت -->
     <main id="app-content" class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
-        <!-- المحتوى سيتم حقنه هنا -->
+        <!-- Dynamic content will be injected here -->
     </main>
 
-    <!-- الفوتر -->
-    <footer class="bg-medical-900 text-white py-6 mt-auto">
+    <footer class="bg-medical-900 text-white py-8 mt-auto border-t border-medical-800">
         <div class="max-w-7xl mx-auto px-4 text-center flex flex-col items-center">
-            <p class="mb-4 text-sm md:text-base">صُنع بحب لطلاب التمريض 🩺 | ذاكر بذكاء وليس بجهد</p>
+            <p class="mb-4 font-semibold text-sm md:text-base text-medical-100">صُنع بحب لطلاب التمريض 🩺 | ذاكر بذكاء وليس بجهد</p>
             
-            <!-- أزرار التواصل الاجتماعي مع كلمة المطور -->
-            <div class="mt-2 flex flex-col sm:flex-row items-center justify-center bg-white/5 py-2 px-6 rounded-2xl border border-white/10 backdrop-blur-sm">
-                <span class="text-medical-100 font-semibold mb-3 sm:mb-0 sm:ml-4 flex items-center">
-                    <i class="fa-solid fa-code text-medical-500 ml-2"></i> للتواصل مع المطور :
+            <div class="flex flex-col sm:flex-row items-center justify-center bg-white/10 py-3 px-6 rounded-2xl border border-white/15 backdrop-blur-md">
+                <span class="text-medical-100 font-semibold mb-3 sm:mb-0 sm:ml-4 flex items-center text-sm">
+                    <i class="fa-solid fa-code text-medical-400 ml-2"></i> للتواصل مع المطور :
                 </span>
                 <div class="flex items-center space-x-4 space-x-reverse">
-                    <!-- واتساب -->
-                    <a href="https://wa.me/201150592561" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center w-10 h-10 bg-white/10 rounded-full hover:bg-green-500 hover:text-white transition-all duration-300 transform hover:-translate-y-1 shadow-lg" title="تواصل معي على واتساب">
+                    <a href="https://wa.me/201150592561" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center w-10 h-10 bg-white/10 rounded-full hover:bg-emerald-500 hover:text-white transition transform hover:-translate-y-1 shadow-md" title="تواصل على واتساب">
                         <i class="fa-brands fa-whatsapp text-xl"></i>
                     </a>
-                    <!-- انستجرام -->
-                    <a href="https://instagram.com/m0s7afa_07x" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center w-10 h-10 bg-white/10 rounded-full hover:bg-pink-600 hover:text-white transition-all duration-300 transform hover:-translate-y-1 shadow-lg" title="تابعني على انستجرام">
+                    <a href="https://instagram.com/m0s7afa_07x" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center w-10 h-10 bg-white/10 rounded-full hover:bg-pink-600 hover:text-white transition transform hover:-translate-y-1 shadow-md" title="تابع على انستجرام">
                         <i class="fa-brands fa-instagram text-xl"></i>
                     </a>
                 </div>
@@ -126,65 +153,33 @@
     </footer>
 
     <script>
-        // ---------------------------------------------------------
-        // دوال رسالة الترحيب
-        // ---------------------------------------------------------
-        function showWelcomeModal() {
-            // التحقق مما إذا كانت الرسالة ظهرت من قبل في هذه الجلسة
-            if (!sessionStorage.getItem('welcomeMessageShown')) {
-                const modal = document.getElementById('welcome-modal');
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
-                
-                // إضافة تأخير بسيط لتفعيل الأنيميشن بسلاسة
-                setTimeout(() => {
-                    modal.classList.remove('opacity-0');
-                    modal.querySelector('.transform').classList.remove('scale-95');
-                    modal.querySelector('.transform').classList.add('scale-100');
-                }, 10);
-
-                // حفظ في الجلسة لكي لا تظهر مرة أخرى إلا إذا أغلق المتصفح
-                sessionStorage.setItem('welcomeMessageShown', 'true');
-            }
-        }
-
-        function closeWelcomeModal() {
-            const modal = document.getElementById('welcome-modal');
-            modal.classList.add('opacity-0');
-            modal.querySelector('.transform').classList.remove('scale-100');
-            modal.querySelector('.transform').classList.add('scale-95');
-            
-            // الانتظار حتى ينتهي تأثير الإغلاق ثم إخفاء العنصر
-            setTimeout(() => {
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
-            }, 300);
-        }
-
-        // ---------------------------------------------------------
-        // 1. قاعدة البيانات الوهمية (Mock Database)
-        // يمكنك لاحقاً استبدال هذا بـ API حقيقي وقاعدة بيانات
-        // ---------------------------------------------------------
         const data = {
             subjects: [
-                { id: 'sub_1', name: 'Anatomy', arabicName: 'علم التشريح', icon: 'fa-bone' },
-                { id: 'sub_2', name: 'Physiology', arabicName: 'علم وظائف الأعضاء', icon: 'fa-heart-pulse' },
-                { id: 'sub_3', name: 'Fundamentals of Nursing', arabicName: 'أساسيات التمريض', icon: 'fa-user-nurse' },
-                { id: 'sub_4', name: 'Medical Terminology', arabicName: 'المصطلحات الطبية', icon: 'fa-book-medical' }
+                { id: 'sub_1', name: 'Anatomy', arabicName: 'علم التشريح', icon: 'fa-bone', color: 'from-amber-500 to-orange-600' },
+                { id: 'sub_2', name: 'Physiology', arabicName: 'علم وظائف الأعضاء', icon: 'fa-heart-pulse', color: 'from-rose-500 to-red-600' },
+                { id: 'sub_3', name: 'Fundamentals of Nursing', arabicName: 'أساسيات التمريض', icon: 'fa-user-nurse', color: 'from-teal-500 to-emerald-600' },
+                { id: 'sub_4', name: 'Medical Terminology', arabicName: 'المصطلحات الطبية', icon: 'fa-book-medical', color: 'from-sky-500 to-blue-600' }
             ],
             lectures: {
                 'sub_1': [
-                    { id: 'lec_1_1', title: 'Cardiovascular System', arabicTitle: 'الجهاز الدوري (القلب والأوعية)' },
-                    { id: 'lec_1_2', title: 'Respiratory System', arabicTitle: 'الجهاز التنفسي' }
+                    { id: 'lec_1_1', title: 'Cardiovascular System Structure', arabicTitle: 'تركيب الجهاز الدوري والقلب' },
+                    { id: 'lec_1_2', title: 'Respiratory Anatomy', arabicTitle: 'تشريح الجهاز التنفسي' }
+                ],
+                'sub_2': [
+                    { id: 'lec_2_1', title: 'Nervous System & Action Potential', arabicTitle: 'الجهاز العصبي والسيال العصبي' },
+                    { id: 'lec_2_2', title: 'Renal Physiology & Homeostasis', arabicTitle: 'وظائف الكلى والاتزان الداخلي' }
                 ],
                 'sub_3': [
                     { id: 'lec_3_3', title: 'Introduction & History of Nursing', arabicTitle: 'مقدمة وتاريخ التمريض' },
-                    { id: 'lec_3_4', title: 'Basic Human Needs (Maslow)', arabicTitle: 'الاحتياجات الإنسانية (ماسلو)' },
-                    { id: 'lec_3_1', title: 'Vital Signs', arabicTitle: 'العلامات الحيوية' },
-                    { id: 'lec_3_2', title: 'Infection Control', arabicTitle: 'مكافحة العدوى' }
+                    { id: 'lec_3_4', title: 'Basic Human Needs (Maslow)', arabicTitle: 'الاحتياجات الإنسانية (ماسلو)' }
+                ],
+                'sub_4': [
+                    { id: 'lec_4_1', title: 'Word Building & Prefixes Suffixes', arabicTitle: 'بناء الكلمة البادئات واللاحقات' },
+                    { id: 'lec_4_2', title: 'Anatomical Positions & Directions', arabicTitle: 'الأتجاهات والأوضاع التشريحية' }
                 ]
             },
             lectureDetails: {
+                // Fundamentals: Intro & History
                 'lec_3_3': {
                     id: 'lec_3_3',
                     subjectId: 'sub_3',
@@ -192,174 +187,158 @@
                     arabicTitle: 'مقدمة وتاريخ التمريض',
                     summary: `
                         <div class="space-y-6">
-                            <!-- 1. Nursing Leaders -->
+                            <!-- Outlines -->
                             <section>
-                                <h4 class="font-bold text-xl text-medical-800 mb-4 border-b-2 border-medical-100 pb-2 text-left" dir="ltr">1. Nursing Leaders in the World</h4>
+                                <h4 class="font-bold text-xl text-medical-800 dark:text-medical-300 mb-4 border-b-2 border-medical-200 dark:border-slate-700 pb-2" dir="ltr">1. Nursing Leaders in the World</h4>
                                 
                                 <div class="space-y-4">
-                                    <!-- Florence -->
-                                    <div class="bg-white p-4 rounded-xl border-l-4 border-medical-500 shadow-sm">
-                                        <h5 class="text-lg font-bold text-medical-900 mb-2 text-left" dir="ltr">Florence Nightingale</h5>
-                                        <div class="text-left text-gray-800 font-bold mb-2" dir="ltr">
-                                            - Is the founder of modern nursing.<br>
-                                            - She provided the nursing profession with the philosophical basis from which other theories have emerged and developed.<br>
-                                            - Has an important role in reforming hospitals.<br>
-                                            - Nightingale opened the first nursing school outside a hospital in 1860.
-                                        </div>
-                                        <div class="text-right text-medical-700 border-t border-gray-100 pt-3 font-semibold" dir="rtl">
-                                            - هي مؤسسة التمريض الحديث.<br>
-                                            - وفرت لمهنة التمريض الأساس الفلسفي الذي ظهرت وتطورت منه نظريات أخرى.<br>
-                                            - لها دور مهم في إصلاح المستشفيات.<br>
-                                            - افتتحت نايتنجيل أول مدرسة تمريض خارج مستشفى عام 1860.
-                                        </div>
-                                        <div class="flex flex-wrap gap-4 mt-4 justify-start" dir="ltr">
-                                            <img src="https://i.postimg.cc/WbB4Tn0b/Picture4.png" class="h-32 object-contain rounded border p-1 bg-white" alt="Florence 1">
-                                            <img src="https://i.postimg.cc/JnzrPdWC/Picture2.png" class="h-32 object-contain rounded border p-1 bg-white" alt="Florence 2">
-                                        </div>
-                                    </div>
-
-                                    <!-- Clara Barton -->
-                                    <div class="bg-white p-4 rounded-xl border-l-4 border-medical-500 shadow-sm">
-                                        <h5 class="text-lg font-bold text-medical-900 mb-2 text-left" dir="ltr">Clara Barton (1812-1912)</h5>
-                                        <div class="text-left text-gray-800 font-bold mb-2" dir="ltr">
-                                            - Is the founder of the American Red Cross.
-                                        </div>
-                                        <div class="text-right text-medical-700 border-t border-gray-100 pt-3 font-semibold" dir="rtl">
-                                            - مؤسسة الصليب الأحمر الأمريكي.
-                                        </div>
-                                        <div class="mt-3 text-left" dir="ltr">
-                                            <img src="https://i.postimg.cc/PfLpHN07/Picture5.png" class="h-32 object-contain rounded border p-1 bg-white" alt="Clara Barton">
+                                    <!-- Florence Nightingale -->
+                                    <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border-r-4 border-medical-500 shadow-sm">
+                                        <h5 class="text-xl font-black text-medical-900 dark:text-medical-200 mb-4" dir="ltr">Florence Nightingale</h5>
+                                        <div class="flex flex-col md:flex-row gap-6 items-start">
+                                            <div class="flex-1 space-y-4">
+                                                <div class="text-left text-gray-800 dark:text-gray-200 font-bold text-sm md:text-base leading-relaxed" dir="ltr">
+                                                    - Is the founder of modern nursing.<br>
+                                                    - She provided the nursing profession with the philosophical basis from which other theories have emerged and developed.<br>
+                                                    - Has an important role in reforming hospitals.<br>
+                                                    - Opened the first nursing school outside a hospital in 1860.
+                                                </div>
+                                                <div class="text-right text-medical-700 dark:text-medical-400 border-t border-gray-100 dark:border-slate-700 pt-3 font-semibold text-sm leading-relaxed" dir="rtl">
+                                                    - هي مؤسسة التمريض الحديث.<br>
+                                                    - قدمت لمهنة التمريض الأساس الفلسفي الذي انبثقت منه النظريات الأخرى وتطورت.<br>
+                                                    - كان لها دور مهم في إصلاح المستشفيات.<br>
+                                                    - افتتحت أول مدرسة تمريض خارج المستشفى عام 1860.
+                                                </div>
+                                            </div>
+                                            <div class="flex flex-col gap-3 w-full md:w-56 shrink-0">
+                                                <img src="https://i.postimg.cc/WbB4Tn0b/Picture4.png" class="rounded-xl shadow-md w-full h-auto object-cover border border-gray-200 dark:border-slate-600 hover:scale-105 transition-transform" alt="Florence Nightingale">
+                                                <img src="https://i.postimg.cc/JnzrPdWC/Picture2.png" class="rounded-xl shadow-md w-full h-auto object-cover border border-gray-200 dark:border-slate-600 hover:scale-105 transition-transform" alt="Nursing History">
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <!-- Lillian Wald -->
-                                    <div class="bg-white p-4 rounded-xl border-l-4 border-medical-500 shadow-sm">
-                                        <h5 class="text-lg font-bold text-medical-900 mb-2 text-left" dir="ltr">Lillian Wald (1867–1940)</h5>
-                                        <div class="text-left text-gray-800 font-bold mb-2" dir="ltr">
-                                            - Is considered the founder of American public health nursing.
-                                        </div>
-                                        <div class="text-right text-medical-700 border-t border-gray-100 pt-3 font-semibold" dir="rtl">
-                                            - تعتبر مؤسسة تمريض الصحة العامة الأمريكي.
-                                        </div>
-                                        <div class="mt-3 text-left" dir="ltr">
-                                            <img src="https://i.postimg.cc/nLPFSGV8/Picture6.png" class="h-32 object-contain rounded border p-1 bg-white" alt="Lillian Wald">
-                                        </div>
-                                    </div>
+                                    <!-- Civil War Era Leaders -->
+                                    <h5 class="font-bold text-xl text-gray-800 dark:text-gray-200 mt-6 mb-3" dir="ltr">Civil War to the Beginning of the Twentieth Century</h5>
                                     
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <!-- Clara Barton -->
+                                        <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border-r-4 border-rose-500 shadow-sm flex flex-col items-center text-center">
+                                            <img src="https://i.postimg.cc/PfLpHN07/Picture5.png" class="rounded-xl shadow-md h-40 w-auto mb-4 border border-gray-100 dark:border-slate-700 hover:scale-105 transition-transform" alt="Clara Barton">
+                                            <h5 class="text-lg font-black text-medical-900 dark:text-medical-200 mb-2" dir="ltr">Clara Barton (1812-1912)</h5>
+                                            <div class="text-gray-800 dark:text-gray-200 font-bold text-sm mb-2" dir="ltr">Is the founder of the American Red Cross.</div>
+                                            <div class="text-medical-700 dark:text-medical-400 font-bold text-sm bg-rose-50 dark:bg-rose-900/20 px-3 py-1.5 rounded-lg" dir="rtl">مؤسسة الصليب الأحمر الأمريكي.</div>
+                                        </div>
+
+                                        <!-- Lillian Wald -->
+                                        <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border-r-4 border-sky-500 shadow-sm flex flex-col items-center text-center">
+                                            <img src="https://i.postimg.cc/nLPFSGV8/Picture6.png" class="rounded-xl shadow-md h-40 w-auto mb-4 border border-gray-100 dark:border-slate-700 hover:scale-105 transition-transform" alt="Lillian Wald">
+                                            <h5 class="text-lg font-black text-medical-900 dark:text-medical-200 mb-2" dir="ltr">Lillian Wald (1867–1940)</h5>
+                                            <div class="text-gray-800 dark:text-gray-200 font-bold text-sm mb-2" dir="ltr">Is considered the founder of American public health nursing.</div>
+                                            <div class="text-medical-700 dark:text-medical-400 font-bold text-sm bg-sky-50 dark:bg-sky-900/20 px-3 py-1.5 rounded-lg" dir="rtl">تعتبر مؤسسة تمريض الصحة العامة الأمريكية.</div>
+                                        </div>
+                                    </div>
+
                                     <!-- Mary Bickerdyke & Mary Mahoney -->
-                                    <div class="bg-white p-4 rounded-xl border-l-4 border-medical-500 shadow-sm">
-                                        <h5 class="text-lg font-bold text-medical-900 mb-2 text-left" dir="ltr">Mary Bickerdyke</h5>
-                                        <div class="text-left text-gray-800 font-bold mb-2" dir="ltr">
-                                            - She started one of the first midwifery schools in the United States.
-                                        </div>
-                                        <div class="text-right text-medical-700 border-t border-gray-100 pt-3 font-semibold mb-4" dir="rtl">
-                                            - بدأت واحدة من أوائل مدارس القبالة (التوليد) في الولايات المتحدة.
-                                        </div>
-                                        
-                                        <h5 class="text-lg font-bold text-medical-900 mb-2 text-left" dir="ltr">Mary Mahoney</h5>
-                                        <div class="text-left text-gray-800 font-bold mb-2" dir="ltr">
-                                            - The first African-American graduated nurse.
-                                        </div>
-                                        <div class="text-right text-medical-700 border-t border-gray-100 pt-3 font-semibold" dir="rtl">
-                                            - أول ممرضة أمريكية من أصل أفريقي تتخرج.
+                                    <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border-r-4 border-amber-500 shadow-sm mt-4">
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                            <div class="border-b md:border-b-0 md:border-r border-gray-100 dark:border-slate-700 pb-4 md:pb-0 md:pr-4">
+                                                <h5 class="text-lg font-black text-medical-900 dark:text-medical-200 mb-2" dir="ltr">Mary Bickerdyke</h5>
+                                                <div class="text-left text-gray-800 dark:text-gray-200 font-bold mb-2 text-sm" dir="ltr">She started one of the first midwifery schools in the United States.</div>
+                                                <div class="text-right text-medical-700 dark:text-medical-400 font-semibold text-sm" dir="rtl">بدأت إحدى أوائل مدارس القبالة (التوليد) في الولايات المتحدة.</div>
+                                            </div>
+                                            <div>
+                                                <h5 class="text-lg font-black text-medical-900 dark:text-medical-200 mb-2" dir="ltr">Mary Mahoney</h5>
+                                                <div class="text-left text-gray-800 dark:text-gray-200 font-bold mb-2 text-sm" dir="ltr">The first African-American graduated nurse.</div>
+                                                <div class="text-right text-medical-700 dark:text-medical-400 font-semibold text-sm" dir="rtl">أول ممرضة خريجة أمريكية من أصل أفريقي.</div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </section>
 
-                            <!-- 2. Islamic Era -->
+                            <!-- Islamic Era -->
                             <section>
-                                <h4 class="font-bold text-xl text-medical-800 mb-4 border-b-2 border-medical-100 pb-2 text-left" dir="ltr">2. Nursing leaders in the Islamic era</h4>
-                                <div class="bg-white p-4 rounded-xl border-l-4 border-medical-500 shadow-sm">
-                                    <div class="text-left text-gray-800 font-bold mb-2 leading-relaxed" dir="ltr">
-                                        The Arab women in early Islamic history have great merit in the field of first aid and nursing care.<br>
-                                        The most important women appear in this time:<br>
-                                        • Halima Alsatian<br>
-                                        • Om Ayman<br>
-                                        • Om slama<br>
-                                        • Aisha Bint Abi Bakr<br>
-                                        • Rufaidah bint Saad
+                                <h4 class="font-bold text-xl text-medical-800 dark:text-medical-300 mb-3 border-b-2 border-medical-200 dark:border-slate-700 pb-2" dir="ltr">2. Nursing Leaders in the Islamic Era</h4>
+                                <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border-r-4 border-emerald-500">
+                                    <div class="text-left text-gray-800 dark:text-gray-200 font-bold mb-3 text-sm md:text-base leading-relaxed" dir="ltr">
+                                        The Arab women in early Islamic history have great merit in the field of first aid and nursing care. The most important women appear in this time:
+                                        <ul class="grid grid-cols-2 gap-2 mt-3 text-medical-600 dark:text-medical-400 bg-emerald-50 dark:bg-slate-700 p-4 rounded-xl">
+                                            <li><i class="fa-solid fa-star text-xs mr-2"></i> Halima Alsatian</li>
+                                            <li><i class="fa-solid fa-star text-xs mr-2"></i> Om Ayman</li>
+                                            <li><i class="fa-solid fa-star text-xs mr-2"></i> Om slama</li>
+                                            <li><i class="fa-solid fa-star text-xs mr-2"></i> Aisha Bint Abi Bakr</li>
+                                            <li class="col-span-2"><i class="fa-solid fa-star text-xs mr-2"></i> Rufaidah bint Saad</li>
+                                        </ul>
                                     </div>
-                                    <div class="text-right text-medical-700 border-t border-gray-100 pt-3 font-semibold leading-relaxed" dir="rtl">
-                                        النساء العربيات في بداية التاريخ الإسلامي كان لهن فضل عظيم في مجال الإسعافات الأولية والرعاية التمريضية.<br>
-                                        أهم النساء في هذا الوقت هن:<br>
-                                        • حليمة السعدية<br>
-                                        • أم أيمن<br>
-                                        • أم سلمة<br>
-                                        • عائشة بنت أبي بكر<br>
-                                        • رفيدة بنت سعد
+                                    <div class="text-right text-medical-700 dark:text-medical-400 border-t border-gray-100 dark:border-slate-700 pt-4 font-semibold text-sm leading-relaxed" dir="rtl">
+                                        للنساء العربيات في التاريخ الإسلامي المبكر فضل كبير في مجال الإسعافات الأولية والرعاية التمريضية. ومن أهم هؤلاء النساء اللاتي برزن في ذلك الوقت:
+                                        <br> (حليمة السعدية، أم أيمن، أم سلمة، عائشة بنت أبي بكر، رفيدة بنت سعد).
                                     </div>
                                 </div>
                             </section>
 
-                            <!-- 3. Definitions -->
+                            <!-- Definitions of Nursing -->
                             <section>
-                                <h4 class="font-bold text-xl text-medical-800 mb-4 border-b-2 border-medical-100 pb-2 text-left" dir="ltr">3. Definitions of nursing</h4>
-                                
-                                <div class="bg-blue-50 p-4 rounded-xl border-l-4 border-blue-500 shadow-sm mb-4">
-                                    <h5 class="text-lg font-bold text-blue-900 mb-2 text-left" dir="ltr">According to Florence Nightingale:</h5>
-                                    <div class="text-left text-gray-800 font-bold mb-2" dir="ltr">
-                                        "The act of utilizing the environment of the patient to assist him in his recovery."
+                                <h4 class="font-bold text-xl text-medical-800 dark:text-medical-300 mb-3 border-b-2 border-medical-200 dark:border-slate-700 pb-2" dir="ltr">3. Definitions of Nursing</h4>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div class="bg-teal-50 dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-teal-100 dark:border-slate-700 relative overflow-hidden">
+                                        <div class="absolute -right-4 -top-4 opacity-10 text-6xl text-teal-500 pointer-events-none"><i class="fa-solid fa-quote-right"></i></div>
+                                        <h5 class="text-lg font-black text-teal-800 dark:text-teal-300 mb-3" dir="ltr">According to Florence Nightingale</h5>
+                                        <div class="text-left text-gray-800 dark:text-gray-200 font-bold mb-3 text-sm leading-relaxed" dir="ltr">"The act of utilizing the environment of the patient to assist him in his recovery."</div>
+                                        <div class="text-right text-teal-700 dark:text-teal-400 font-semibold text-sm border-t border-teal-200 dark:border-slate-600 pt-2" dir="rtl">"العمل على استخدام بيئة المريض لمساعدته في الشفاء."</div>
                                     </div>
-                                    <div class="text-right text-blue-700 border-t border-blue-200 pt-3 font-semibold" dir="rtl">
-                                        "القيام باستخدام بيئة المريض لمساعدته على التعافي."
-                                    </div>
-                                </div>
-
-                                <div class="bg-green-50 p-4 rounded-xl border-l-4 border-green-500 shadow-sm">
-                                    <h5 class="text-lg font-bold text-green-900 mb-2 text-left" dir="ltr">The American Nurses Association (ANA) defined nursing as:</h5>
-                                    <div class="text-left text-gray-800 font-bold mb-2" dir="ltr">
-                                        "Nursing is the protection, promotion, and optimization of health and abilities, preventions of illness and injury, alleviation of suffering through the diagnosis and treatment."
-                                    </div>
-                                    <div class="text-right text-green-700 border-t border-green-200 pt-3 font-semibold" dir="rtl">
-                                        "التمريض هو حماية وتعزيز الصحة والقدرات، الوقاية من الأمراض والإصابات، وتخفيف المعاناة من خلال التشخيص والعلاج."
+                                    <div class="bg-blue-50 dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-blue-100 dark:border-slate-700 relative overflow-hidden">
+                                        <div class="absolute -right-4 -top-4 opacity-10 text-6xl text-blue-500 pointer-events-none"><i class="fa-solid fa-quote-right"></i></div>
+                                        <h5 class="text-lg font-black text-blue-800 dark:text-blue-300 mb-3" dir="ltr">American Nurses Association (ANA)</h5>
+                                        <div class="text-left text-gray-800 dark:text-gray-200 font-bold mb-3 text-sm leading-relaxed" dir="ltr">"Nursing is the protection, promotion, and optimization of health and abilities, preventions of illness and injury, alleviation of suffering through the diagnosis and treatment."</div>
+                                        <div class="text-right text-blue-700 dark:text-blue-400 font-semibold text-sm border-t border-blue-200 dark:border-slate-600 pt-2" dir="rtl">"التمريض هو حماية وتعزيز وتحسين الصحة والقدرات، والوقاية من الأمراض والإصابات، وتخفيف المعاناة من خلال التشخيص والعلاج."</div>
                                     </div>
                                 </div>
                             </section>
 
-                            <!-- 4. Settings -->
+                            <!-- Setting & Providers & Roles -->
                             <section>
-                                <h4 class="font-bold text-xl text-medical-800 mb-4 border-b-2 border-medical-100 pb-2 text-left" dir="ltr">4. Setting for Nursing</h4>
-                                <div class="bg-white p-4 rounded-xl border-l-4 border-medical-500 shadow-sm">
-                                    <div class="text-left text-gray-800 font-bold mb-2 leading-relaxed" dir="ltr">
-                                        In the past, the acute care hospital was the main practice setting open to most nurses.<br>
-                                        Today many nurses work in hospitals, increasingly they work in:<br>
-                                        • Patient's home and community agencies.<br>
-                                        • Ambulatory clinics, long-Term care.<br>
-                                        • Health maintenance organization (HMOs), and nursing practice centers.
+                                <h4 class="font-bold text-xl text-medical-800 dark:text-medical-300 mb-3 border-b-2 border-medical-200 dark:border-slate-700 pb-2" dir="ltr">4. Settings, Providers & Roles</h4>
+                                <div class="space-y-4">
+                                    
+                                    <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border-r-4 border-indigo-500 shadow-sm">
+                                        <h5 class="text-lg font-black text-indigo-800 dark:text-indigo-300 mb-2" dir="ltr">Setting for Nursing (أماكن العمل)</h5>
+                                        <div class="text-left text-gray-800 dark:text-gray-200 font-bold text-sm mb-2 leading-relaxed" dir="ltr">
+                                            In the past, the acute care hospital was the main practice setting open to most nurses. Today many nurses work in hospitals, increasingly they work in:
+                                            <ul class="list-disc list-inside mt-2 text-indigo-600 dark:text-indigo-400">
+                                                <li>Patient's home and community agencies.</li>
+                                                <li>Ambulatory clinics, long-Term care.</li>
+                                                <li>Health maintenance organization (HMOs), and nursing practice centers.</li>
+                                            </ul>
+                                        </div>
                                     </div>
-                                    <div class="text-right text-medical-700 border-t border-gray-100 pt-3 font-semibold leading-relaxed" dir="rtl">
-                                        في الماضي، كانت مستشفيات الرعاية الحادة هي مكان العمل الرئيسي المتاح لمعظم الممرضين.<br>
-                                        اليوم، يعمل العديد من الممرضين في المستشفيات، وبشكل متزايد يعملون في:<br>
-                                        • منزل المريض والوكالات المجتمعية.<br>
-                                        • العيادات الخارجية، الرعاية طويلة الأمد.<br>
-                                        • منظمات الحفاظ على الصحة، ومراكز ممارسة التمريض.
-                                    </div>
-                                </div>
-                            </section>
 
-                            <!-- 5. Providers -->
-                            <section>
-                                <h4 class="font-bold text-xl text-medical-800 mb-4 border-b-2 border-medical-100 pb-2 text-left" dir="ltr">5. Providers of Health Care</h4>
-                                <div class="bg-white p-4 rounded-xl border-l-4 border-medical-500 shadow-sm">
-                                    <div class="text-left text-gray-800 font-bold mb-2" dir="ltr">
-                                        Nurse, Physician, Dietitian or nutritionist, Paramedical, Technologists, Pharmacist, Physical therapist, Social workers.
-                                    </div>
-                                    <div class="text-right text-medical-700 border-t border-gray-100 pt-3 font-semibold" dir="rtl">
-                                        الممرض، الطبيب، أخصائي التغذية، المسعف، التقنيون، الصيدلي، أخصائي العلاج الطبيعي، الأخصائيون الاجتماعيون.
-                                    </div>
-                                </div>
-                            </section>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border-r-4 border-purple-500 shadow-sm">
+                                            <h5 class="text-lg font-black text-purple-800 dark:text-purple-300 mb-3" dir="ltr">Providers of Health Care</h5>
+                                            <ul class="grid grid-cols-2 gap-2 text-left text-gray-700 dark:text-gray-300 font-bold text-sm" dir="ltr">
+                                                <li>- Nurse</li>
+                                                <li>- Physician</li>
+                                                <li>- Dietitian / nutritionist</li>
+                                                <li>- Paramedical</li>
+                                                <li>- Technologists</li>
+                                                <li>- Pharmacist</li>
+                                                <li>- Physical therapist</li>
+                                                <li>- Social workers</li>
+                                            </ul>
+                                        </div>
 
-                            <!-- 6. Roles -->
-                            <section>
-                                <h4 class="font-bold text-xl text-medical-800 mb-4 border-b-2 border-medical-100 pb-2 text-left" dir="ltr">6. Contemporary Nursing Roles</h4>
-                                <div class="bg-white p-4 rounded-xl border-l-4 border-medical-500 shadow-sm">
-                                    <div class="text-left text-gray-800 font-bold mb-2" dir="ltr">
-                                        Care provider, An advocate, Communicator, Team member, Teacher, Leader.
-                                    </div>
-                                    <div class="text-right text-medical-700 border-t border-gray-100 pt-3 font-semibold" dir="rtl">
-                                        مقدم رعاية، مدافع عن المريض (متحدث باسمه)، متواصل، عضو في فريق، معلم، قائد.
+                                        <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border-r-4 border-pink-500 shadow-sm">
+                                            <h5 class="text-lg font-black text-pink-800 dark:text-pink-300 mb-3" dir="ltr">Contemporary Nursing Roles</h5>
+                                            <ul class="grid grid-cols-2 gap-2 text-left text-gray-700 dark:text-gray-300 font-bold text-sm" dir="ltr">
+                                                <li>- Care provider</li>
+                                                <li>- An advocate</li>
+                                                <li>- Communicator</li>
+                                                <li>- Team member</li>
+                                                <li>- Teacher</li>
+                                                <li>- Leader</li>
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
                             </section>
@@ -367,22 +346,22 @@
                     `,
                     terms: [
                         { en: 'Modern nursing', ar: 'التمريض الحديث', desc: 'النهج العلمي والطبي لمهنة التمريض الذي أسسته فلورانس نايتنجيل.' },
-                        { en: 'Midwifery', ar: 'القبالة / التوليد', desc: 'تخصص طبي يعنى برعاية النساء أثناء الحمل والولادة.' },
+                        { en: 'Midwifery', ar: 'القبالة / التوليد', desc: 'تخصص طبي يعنى برعاية النساء أثناء الحمل والولادة، أسست ماري بيكرديك إحدى أوائل مدارسها.' },
                         { en: 'First aid', ar: 'الإسعافات الأولية', desc: 'الرعاية الطبية العاجلة والمؤقتة التي تقدم للمصاب.' },
-                        { en: 'Environment', ar: 'البيئة', desc: 'الظروف المحيطة بالمريض والتي تؤثر على تعافيه كما ذكرت نايتنجيل.' },
-                        { en: 'Advocate', ar: 'مدافع عن المريض', desc: 'من أدوار الممرض: حماية حقوق المريض والتحدث نيابة عنه عند الحاجة.' },
-                        { en: 'Ambulatory clinics', ar: 'العيادات الخارجية', desc: 'مراكز رعاية صحية تقدم العلاج للمرضى دون الحاجة لتنويمهم في المستشفى.' },
-                        { en: 'Alleviation of suffering', ar: 'تخفيف المعاناة', desc: 'تقليل الألم الجسدي والنفسي للمريض، وهو جزء من تعريف ANA.' }
+                        { en: 'Environment', ar: 'البيئة المحيطة', desc: 'الظروف المحيطة بالمريض التي تؤثر على شفائه وفق تعريف نايتنجيل.' },
+                        { en: 'Advocate', ar: 'مدافع عن المريض', desc: 'من أدوار التمريض المعاصرة في حماية حقوق المريض والتحدث بلسانه.' },
+                        { en: 'Ambulatory clinics', ar: 'العيادات الخارجية', desc: 'إحدى أماكن تقديم الرعاية الصحية للمرضى غير المقيمين.' }
                     ],
                     quiz: [
                         { q: 'First founder of nursing school is:', options: ['Clara Barton', 'Florence Nightingale', 'Mary Mahoney', 'Lillian Wald'], correctIndex: 1 },
-                        { q: 'Nursing leader in Islamic Era:', options: ['Om El moamenin', 'Mary Bickerdyke', 'Florence Nightingale', 'Lilian Wald'], correctIndex: 0 },
-                        { q: 'According to Florence Nightingale, Nursing is:', options: ['Diagnosing illness and giving medicine', 'The act of utilizing the environment of the patient to assist him in his recovery', 'Managing the hospital staff', 'Writing care plans only'], correctIndex: 1 },
-                        { q: 'Which of the following is considered a Contemporary nursing role?', options: ['An advocate', 'Pharmacist', 'Physician', 'Dietitian'], correctIndex: 0 },
-                        { q: 'Who is the founder of the American Red Cross?', options: ['Lillian Wald', 'Clara Barton', 'Mary Mahoney', 'Rufaidah bint Saad'], correctIndex: 1 },
-                        { q: 'List of Providers of health care includes:', options: ['Only Physicians', 'Nurse, Physician, Dietitian, Pharmacist', 'Teachers and Leaders', 'Only Nurses'], correctIndex: 1 }
+                        { q: 'Nursing leader in Islamic Era:', options: ['Om El moamenin', 'Mary Bickerdyke', 'Florence Nightingale', 'Lilian wald'], correctIndex: 0 },
+                        { q: 'According to Florence Nightingale, Nursing is:', options: ['Prescribing medication only', 'The act of utilizing the environment of the patient to assist him in his recovery', 'Managing hospital budgets', 'Surgical operations'], correctIndex: 1 },
+                        { q: 'Which of the following is considered a Contemporary nursing role?', options: ['Pharmacist', 'Physician', 'Care provider & Advocate', 'Dietitian'], correctIndex: 2 },
+                        { q: 'List a setting for nursing services today:', options: ['Ambulatory clinics & HMOs', 'Engineering companies', 'Law firms', 'Accounting offices'], correctIndex: 0 },
+                        { q: 'Providers of health care include all of the following EXCEPT:', options: ['Nurse and Physician', 'Pharmacist and Dietitian', 'Social workers', 'Civil Engineer'], correctIndex: 3 }
                     ]
                 },
+
                 'lec_3_4': {
                     id: 'lec_3_4',
                     subjectId: 'sub_3',
@@ -392,263 +371,439 @@
                         <div class="space-y-6">
                             <!-- Definition -->
                             <section>
-                                <h4 class="font-bold text-xl text-medical-800 mb-4 border-b-2 border-medical-100 pb-2 text-left" dir="ltr">1. Definition & Concept</h4>
-                                <div class="bg-white p-4 rounded-xl border-l-4 border-medical-500 shadow-sm mb-4">
-                                    <div class="text-left text-gray-800 font-bold text-lg mb-2" dir="ltr">
-                                        Definition of basic human needs according to Maslow:<br>
+                                <h4 class="font-bold text-xl text-medical-800 dark:text-medical-300 mb-3 border-b-2 border-medical-200 dark:border-slate-700 pb-2" dir="ltr">Definition of basic human needs according to Maslow</h4>
+                                <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border-r-4 border-medical-500 mb-4">
+                                    <p class="text-gray-800 dark:text-gray-200 font-semibold text-sm md:text-base leading-relaxed" dir="ltr">
                                         As a progression from simple physiological needs (needed for survival) to more complex needs.
-                                    </div>
-                                    <div class="text-right text-medical-700 font-semibold border-t border-gray-100 pt-3" dir="rtl">
-                                        تعريف الاحتياجات الإنسانية الأساسية حسب ماسلو:<br>
+                                    </p>
+                                    <p class="text-right text-medical-700 dark:text-medical-400 font-bold text-sm mt-2 border-t border-gray-100 dark:border-slate-700 pt-2" dir="rtl">
                                         هي تدرج من الاحتياجات الفسيولوجية البسيطة (اللازمة للبقاء على قيد الحياة) إلى احتياجات أكثر تعقيداً.
-                                    </div>
+                                    </p>
                                 </div>
                                 
-                                <div class="bg-white p-4 rounded-xl border-l-4 border-orange-500 shadow-sm">
-                                    <div class="text-left text-gray-800 font-bold text-lg mb-2" dir="ltr">
-                                        Note: Once an essential need is met, the person experiences a need on a higher level.<br>
-                                        For example: People who are hungry will not be concerned about cleanliness or learning until they are fed.
-                                    </div>
-                                    <div class="text-right text-orange-700 font-semibold border-t border-gray-100 pt-3" dir="rtl">
+                                <div class="bg-amber-50 dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-amber-100 dark:border-slate-700">
+                                    <h5 class="font-black text-amber-800 dark:text-amber-300 mb-2 flex items-center" dir="ltr"><i class="fa-solid fa-lightbulb text-amber-500 mr-2"></i> Note</h5>
+                                    <p class="text-gray-800 dark:text-gray-200 font-semibold text-sm leading-relaxed mb-2" dir="ltr">
+                                        Once an essential need is met, the person experiences a need on a higher level.<br>
+                                        <strong>For example:</strong> People who are hungry will not be concerned about cleanliness or learning until they are fed.
+                                    </p>
+                                    <div class="text-right text-amber-700 dark:text-amber-400 font-bold text-sm mt-2 border-t border-amber-200 dark:border-slate-600 pt-2" dir="rtl">
                                         ملاحظة هامة: بمجرد تلبية حاجة أساسية، يشعر الشخص بالحاجة إلى مستوى أعلى.<br>
                                         مثال: الأشخاص الجياع لن يهتموا بالنظافة أو التعلم حتى يتم إطعامهم أولاً.
                                     </div>
                                 </div>
                             </section>
 
-                            <!-- Hierarchy Levels -->
+                            <!-- Maslow Hierarchy -->
                             <section>
-                                <h4 class="font-bold text-xl text-medical-800 mb-4 border-b-2 border-medical-100 pb-2 text-left" dir="ltr">2. Maslow's Hierarchy of Needs</h4>
-                                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
-                                    <div class="text-left text-gray-800 font-bold text-lg mb-2 leading-relaxed" dir="ltr">
-                                        1) Basic Physiologic Needs<br>
-                                        2) Security and Safety Needs<br>
-                                        3) Love, Affection, and Belonging<br>
-                                        4) Self-Esteem Needs<br>
-                                        5) Self-Actualization Needs
-                                    </div>
-                                    <div class="text-right text-medical-700 font-semibold border-t border-gray-100 pt-3 leading-relaxed" dir="rtl">
-                                        1) الاحتياجات الفسيولوجية الأساسية (الجسدية)<br>
-                                        2) احتياجات الأمن والسلامة<br>
-                                        3) الحب والمودة والانتماء<br>
-                                        4) احتياجات تقدير الذات<br>
-                                        5) احتياجات تحقيق الذات
-                                    </div>
-                                    <div class="mt-4 flex justify-center">
-                                        <img src="https://i.postimg.cc/QCTHJJn0/page-06-image-01.jpg" alt="Maslow Hierarchy" class="rounded-xl border shadow-sm max-w-full h-auto md:h-80">
+                                <h4 class="font-bold text-xl text-medical-800 dark:text-medical-300 mb-3 border-b-2 border-medical-200 dark:border-slate-700 pb-2" dir="ltr">Maslow's Hierarchy of Needs</h4>
+                                <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm space-y-6">
+                                    <div class="flex flex-col md:flex-row gap-6 items-center">
+                                        <div class="flex-1 space-y-3 font-bold text-sm md:text-base w-full">
+                                            <div class="p-3 bg-red-50 dark:bg-red-900/30 text-red-800 dark:text-red-300 rounded-xl flex flex-col sm:flex-row sm:justify-between gap-1">
+                                                <span dir="ltr">1) Basic Physiologic Needs</span>
+                                                <span dir="rtl" class="text-sm">1) الاحتياجات الفسيولوجية الأساسية (الجسدية)</span>
+                                            </div>
+                                            <div class="p-3 bg-orange-50 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300 rounded-xl flex flex-col sm:flex-row sm:justify-between gap-1">
+                                                <span dir="ltr">2) Security and Safety Needs</span>
+                                                <span dir="rtl" class="text-sm">2) احتياجات الأمن والسلامة</span>
+                                            </div>
+                                            <div class="p-3 bg-yellow-50 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 rounded-xl flex flex-col sm:flex-row sm:justify-between gap-1">
+                                                <span dir="ltr">3) Love, Affection, and Belonging</span>
+                                                <span dir="rtl" class="text-sm">3) الحب والمودة والانتماء</span>
+                                            </div>
+                                            <div class="p-3 bg-blue-50 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-xl flex flex-col sm:flex-row sm:justify-between gap-1">
+                                                <span dir="ltr">4) Self-Esteem Needs</span>
+                                                <span dir="rtl" class="text-sm">4) احتياجات تقدير الذات</span>
+                                            </div>
+                                            <div class="p-3 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-300 rounded-xl flex flex-col sm:flex-row sm:justify-between gap-1">
+                                                <span dir="ltr">5) Self-Actualization Needs</span>
+                                                <span dir="rtl" class="text-sm">5) احتياجات تحقيق الذات</span>
+                                            </div>
+                                        </div>
+                                        <div class="w-full md:w-1/2">
+                                            <img src="https://i.postimg.cc/QCTHJJn0/page-06-image-01.jpg" alt="Maslow Hierarchy" class="rounded-xl shadow-md border border-gray-100 dark:border-slate-700 w-full hover:scale-105 transition-transform duration-300">
+                                        </div>
                                     </div>
                                 </div>
                             </section>
 
-                            <!-- Level 1 Details -->
+                            <!-- Components of Basic Physiologic Needs -->
                             <section>
-                                <h4 class="font-bold text-xl text-medical-800 mb-4 border-b-2 border-medical-100 pb-2 text-left" dir="ltr">3. Components of Basic Physiologic Needs</h4>
-                                
-                                <!-- Air -->
-                                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 mb-4">
-                                    <div class="text-left text-gray-800 font-bold text-lg mb-2" dir="ltr">
-                                        1. Air (Oxygen):<br>
-                                        Most essential survival need. Without it, a person will die in a matter of minutes.<br>
-                                        Threats: Emphysema, Asthma, Paralysis, Secretions.
+                                <h4 class="font-bold text-xl text-medical-800 dark:text-medical-300 mb-3 border-b-2 border-medical-200 dark:border-slate-700 pb-2" dir="ltr">Components of Basic Physiologic Needs</h4>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <!-- 1. Air -->
+                                    <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border-r-4 border-sky-500">
+                                        <h5 class="font-bold text-lg text-sky-700 dark:text-sky-400 mb-2" dir="ltr">1. Air (Oxygen)</h5>
+                                        <p class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2" dir="ltr">Most essential survival need. Without it, a person will die in a matter of minutes.<br><span class="text-rose-500">Threats:</span> Emphysema, Asthma, Paralysis, Secretions.</p>
+                                        <p class="text-sm font-semibold text-sky-800 dark:text-sky-300 text-right border-t pt-2 border-gray-100 dark:border-slate-700" dir="rtl">
+                                            أهم حاجة للبقاء. بدونه يموت الإنسان في دقائق.<br><span class="text-rose-500">المهددات:</span> النفاخ الرئوي (Emphysema)، الربو، الشلل، والإفرازات.
+                                        </p>
                                     </div>
-                                    <div class="text-right text-medical-700 font-semibold border-t border-gray-100 pt-3" dir="rtl">
-                                        1. الهواء (الأكسجين):<br>
-                                        أهم حاجة للبقاء. بدونه يموت الإنسان في دقائق.<br>
-                                        المهددات: النفاخ الرئوي (Emphysema)، الربو، الشلل، والإفرازات.
+                                    
+                                    <!-- 2. Water -->
+                                    <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border-r-4 border-blue-500">
+                                        <h5 class="font-bold text-lg text-blue-700 dark:text-blue-400 mb-2" dir="ltr">2. Water and Fluids</h5>
+                                        <p class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2" dir="ltr">Body can survive only a few days without water.<br><span class="text-emerald-500">Nursing activities:</span> Measuring intake and output, weighing daily, observing IV fluids.</p>
+                                        <p class="text-sm font-semibold text-blue-800 dark:text-blue-300 text-right border-t pt-2 border-gray-100 dark:border-slate-700" dir="rtl">
+                                            الجسم يعيش أياماً قليلة فقط بدون ماء.<br><span class="text-emerald-500">دور الممرض:</span> قياس السوائل الداخلة والخارجة، وزن المريض يومياً، مراقبة المحاليل الوريدية (IV).
+                                        </p>
                                     </div>
-                                </div>
-
-                                <!-- Water -->
-                                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 mb-4">
-                                    <div class="text-left text-gray-800 font-bold text-lg mb-2" dir="ltr">
-                                        2. Water and Fluids:<br>
-                                        Body can survive only a few days without water.<br>
-                                        Nursing activities: Measuring intake and output, weighing daily, observing IV fluids.
+                                    
+                                    <!-- 3. Food -->
+                                    <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border-r-4 border-emerald-500">
+                                        <h5 class="font-bold text-lg text-emerald-700 dark:text-emerald-400 mb-2" dir="ltr">3. Food and Nutrients</h5>
+                                        <p class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2" dir="ltr">Body can survive weeks without food.<br><span class="text-rose-500">Threats:</span> Inability to swallow, Nausea & vomiting.</p>
+                                        <p class="text-sm font-semibold text-emerald-800 dark:text-emerald-300 text-right border-t pt-2 border-gray-100 dark:border-slate-700" dir="rtl">
+                                            يمكن العيش لأسابيع بدون طعام. <br><span class="text-rose-500">المهددات:</span> صعوبة البلع، الغثيان والقيء.
+                                        </p>
                                     </div>
-                                    <div class="text-right text-medical-700 font-semibold border-t border-gray-100 pt-3" dir="rtl">
-                                        2. الماء والسوائل:<br>
-                                        الجسم يعيش أياماً قليلة فقط بدون ماء.<br>
-                                        دور الممرض: قياس السوائل الداخلة والخارجة، وزن المريض يومياً، مراقبة المحاليل الوريدية (IV).
+                                    
+                                    <!-- 4. Elimination -->
+                                    <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border-r-4 border-amber-500">
+                                        <h5 class="font-bold text-lg text-amber-700 dark:text-amber-400 mb-2" dir="ltr">4. Elimination of waste Products</h5>
+                                        <ul class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 list-disc list-inside" dir="ltr">
+                                            <li>Lungs eliminate CO2 and water.</li>
+                                            <li>Skin eliminates water and sodium.</li>
+                                            <li>Kidneys eliminate fluids and electrolytes.</li>
+                                        </ul>
+                                        <ul class="text-sm font-semibold text-amber-800 dark:text-amber-300 text-right border-t pt-2 border-gray-100 dark:border-slate-700" dir="rtl">
+                                            <li>الرئتين تخرج ثاني أكسيد الكربون والماء.</li>
+                                            <li>الجلد يخرج الماء والصوديوم.</li>
+                                            <li>الكلى تخرج السوائل والأملاح.</li>
+                                        </ul>
                                     </div>
-                                </div>
-
-                                <!-- Food & Elimination -->
-                                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 mb-4">
-                                    <div class="text-left text-gray-800 font-bold text-lg mb-2" dir="ltr">
-                                        3. Food and Nutrients:<br>
-                                        Body can survive weeks without food. Threats: Inability to swallow, Nausea & vomiting.<br><br>
-                                        4. Elimination of waste Products:<br>
-                                        - Lungs eliminate CO2 and water.<br>
-                                        - Skin eliminates water and sodium.<br>
-                                        - Kidneys eliminate fluids and electrolytes.
+                                    
+                                    <!-- 5 & 6 -->
+                                    <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border-r-4 border-indigo-500">
+                                        <div class="mb-4">
+                                            <h5 class="font-bold text-lg text-indigo-700 dark:text-indigo-400" dir="ltr">5. Sleep and Rest</h5>
+                                            <p class="text-sm font-semibold text-gray-700 dark:text-gray-300" dir="ltr">Sleep deprivation aggravates mental illness.</p>
+                                            <p class="text-sm font-semibold text-indigo-800 dark:text-indigo-300 text-right mt-1" dir="rtl">الحرمان من النوم يفاقم الأمراض النفسية.</p>
+                                        </div>
+                                        <div class="border-t pt-3 border-gray-100 dark:border-slate-700">
+                                            <h5 class="font-bold text-lg text-indigo-700 dark:text-indigo-400" dir="ltr">6. Activity and Exercise</h5>
+                                            <p class="text-sm font-semibold text-gray-700 dark:text-gray-300" dir="ltr">Needed to maintain optimum health.</p>
+                                            <p class="text-sm font-semibold text-indigo-800 dark:text-indigo-300 text-right mt-1" dir="rtl">ضروري للحفاظ على صحة مثالية.</p>
+                                        </div>
                                     </div>
-                                    <div class="text-right text-medical-700 font-semibold border-t border-gray-100 pt-3" dir="rtl">
-                                        3. الغذاء والعناصر الغذائية:<br>
-                                        يمكن العيش لأسابيع بدون طعام. المهددات: صعوبة البلع، الغثيان والقيء.<br><br>
-                                        4. التخلص من الفضلات (الإخراج):<br>
-                                        - الرئتين تخرج ثاني أكسيد الكربون والماء.<br>
-                                        - الجلد يخرج الماء والصوديوم.<br>
-                                        - الكلى تخرج السوائل والأملاح.
-                                    </div>
-                                </div>
-
-                                <!-- Sleep, Activity, Temp -->
-                                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 mb-4">
-                                    <div class="text-left text-gray-800 font-bold text-lg mb-2" dir="ltr">
-                                        5. Sleep and Rest: Sleep deprivation aggravates mental illness.<br>
-                                        6. Activity and Exercise: Needed to maintain optimum health.<br>
-                                        7. Sexual satisfaction.<br>
-                                        8. Temperature regulation: Threats include excessive heat/cold, burns, fever.
-                                    </div>
-                                    <div class="text-right text-medical-700 font-semibold border-t border-gray-100 pt-3" dir="rtl">
-                                        5. النوم والراحة: الحرمان من النوم يفاقم الأمراض النفسية.<br>
-                                        6. النشاط والتمرين: ضروري للحفاظ على صحة مثالية.<br>
-                                        7. الرضا الجنسي.<br>
-                                        8. تنظيم الحرارة: المهددات تشمل الحرارة أو البرودة الشديدة، الحروق، الحمى.
+                                    
+                                    <!-- 7 & 8 -->
+                                    <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border-r-4 border-rose-500">
+                                        <div class="mb-4">
+                                            <h5 class="font-bold text-lg text-rose-700 dark:text-rose-400" dir="ltr">7. Sexual satisfaction</h5>
+                                            <p class="text-sm font-semibold text-rose-800 dark:text-rose-300 text-right mt-1" dir="rtl">الرضا الجنسي.</p>
+                                        </div>
+                                        <div class="border-t pt-3 border-gray-100 dark:border-slate-700">
+                                            <h5 class="font-bold text-lg text-rose-700 dark:text-rose-400" dir="ltr">8. Temperature regulation</h5>
+                                            <p class="text-sm font-semibold text-gray-700 dark:text-gray-300" dir="ltr"><span class="text-rose-500">Threats include:</span> excessive heat/cold, burns, fever.</p>
+                                            <p class="text-sm font-semibold text-rose-800 dark:text-rose-300 text-right mt-1" dir="rtl"><span class="text-rose-500">المهددات تشمل:</span> الحرارة أو البرودة الشديدة، الحروق، الحمى.</p>
+                                        </div>
                                     </div>
                                 </div>
                             </section>
 
-                            <!-- Levels 2 to 5 -->
+                            <!-- Higher Level Needs -->
                             <section>
-                                <h4 class="font-bold text-xl text-medical-800 mb-4 border-b-2 border-medical-100 pb-2 text-left" dir="ltr">4. Higher Level Needs</h4>
-                                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
-                                    <div class="text-left text-gray-800 font-bold text-lg mb-2 leading-relaxed" dir="ltr">
-                                        II. Security and Safety: Freedom from harm, danger, and shelter.<br>
-                                        III. Love and Belonging: Begins with infant-mother bonding.<br>
-                                        IV. Self-Esteem: Achievements and perception of self-competence.<br>
-                                        V. Self-Actualization: Cope with situations, deal with failure/stress, free of anxiety, sense of humor.
+                                <h4 class="font-bold text-xl text-medical-800 dark:text-medical-300 mb-3 border-b-2 border-medical-200 dark:border-slate-700 pb-2" dir="ltr">Higher Level Needs</h4>
+                                <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm space-y-4">
+                                    <!-- Level 2 -->
+                                    <div class="p-4 bg-orange-50 dark:bg-slate-700/50 rounded-xl border border-orange-100 dark:border-slate-600 flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
+                                        <div>
+                                            <h5 class="font-bold text-orange-800 dark:text-orange-300" dir="ltr">II. Security and Safety</h5>
+                                            <p class="text-sm text-gray-700 dark:text-gray-300 font-semibold" dir="ltr">Freedom from harm, danger, and shelter.</p>
+                                        </div>
+                                        <div class="text-right md:text-left">
+                                            <h5 class="font-bold text-orange-800 dark:text-orange-300" dir="rtl">II. الأمن والسلامة</h5>
+                                            <p class="text-sm text-gray-700 dark:text-gray-300 font-semibold" dir="rtl">التحرر من الأذى والخطر، وتوفير المأوى.</p>
+                                        </div>
                                     </div>
-                                    <div class="text-right text-medical-700 font-semibold border-t border-gray-100 pt-3 leading-relaxed" dir="rtl">
-                                        II. الأمن والسلامة: التحرر من الأذى والخطر، وتوفير المأوى.<br>
-                                        III. الحب والانتماء: يبدأ برابطة الرضيع بأمه.<br>
-                                        IV. تقدير الذات: الإنجازات والشعور بالكفاءة.<br>
-                                        V. تحقيق الذات: التأقلم مع المواقف، التعامل مع الفشل والتوتر، التحرر من القلق، وحس الفكاهة.
+                                    <!-- Level 3 -->
+                                    <div class="p-4 bg-yellow-50 dark:bg-slate-700/50 rounded-xl border border-yellow-100 dark:border-slate-600 flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
+                                        <div>
+                                            <h5 class="font-bold text-yellow-800 dark:text-yellow-300" dir="ltr">III. Love and Belonging</h5>
+                                            <p class="text-sm text-gray-700 dark:text-gray-300 font-semibold" dir="ltr">Begins with infant-mother bonding.</p>
+                                        </div>
+                                        <div class="text-right md:text-left">
+                                            <h5 class="font-bold text-yellow-800 dark:text-yellow-300" dir="rtl">III. الحب والانتماء</h5>
+                                            <p class="text-sm text-gray-700 dark:text-gray-300 font-semibold" dir="rtl">يبدأ برابطة الرضيع بأمه.</p>
+                                        </div>
+                                    </div>
+                                    <!-- Level 4 -->
+                                    <div class="p-4 bg-blue-50 dark:bg-slate-700/50 rounded-xl border border-blue-100 dark:border-slate-600 flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
+                                        <div>
+                                            <h5 class="font-bold text-blue-800 dark:text-blue-300" dir="ltr">IV. Self-Esteem</h5>
+                                            <p class="text-sm text-gray-700 dark:text-gray-300 font-semibold" dir="ltr">Achievements and perception of self-competence.</p>
+                                        </div>
+                                        <div class="text-right md:text-left">
+                                            <h5 class="font-bold text-blue-800 dark:text-blue-300" dir="rtl">IV. تقدير الذات</h5>
+                                            <p class="text-sm text-gray-700 dark:text-gray-300 font-semibold" dir="rtl">الإنجازات والشعور بالكفاءة.</p>
+                                        </div>
+                                    </div>
+                                    <!-- Level 5 -->
+                                    <div class="p-4 bg-emerald-50 dark:bg-slate-700/50 rounded-xl border border-emerald-100 dark:border-slate-600 flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
+                                        <div>
+                                            <h5 class="font-bold text-emerald-800 dark:text-emerald-300" dir="ltr">V. Self-Actualization</h5>
+                                            <p class="text-sm text-gray-700 dark:text-gray-300 font-semibold" dir="ltr">Cope with situations, deal with failure/stress, free of anxiety, sense of humor.</p>
+                                        </div>
+                                        <div class="text-right md:text-left">
+                                            <h5 class="font-bold text-emerald-800 dark:text-emerald-300" dir="rtl">V. تحقيق الذات</h5>
+                                            <p class="text-sm text-gray-700 dark:text-gray-300 font-semibold" dir="rtl">التأقلم مع المواقف، التعامل مع الفشل والتوتر، التحرر من القلق، وحس الفكاهة.</p>
+                                        </div>
                                     </div>
                                 </div>
                             </section>
                         </div>
                     `,
                     terms: [
-                        { en: 'Hierarchy', ar: 'التسلسل الهرمي', desc: 'نظام لتنظيم الأشياء في مستويات حسب الأهمية (مثل هرم ماسلو).' },
-                        { en: 'Physiologic needs', ar: 'الاحتياجات الفسيولوجية', desc: 'الاحتياجات الجسدية الأساسية للبقاء مثل الأكل والشرب والتنفس.' },
-                        { en: 'Self-Actualization', ar: 'تحقيق الذات', desc: 'أعلى مستوى في هرم ماسلو، ويعني وصول الإنسان لأقصى إمكاناته.' },
-                        { en: 'Elimination', ar: 'الإخراج / التخلص من الفضلات', desc: 'عملية تخلص الجسم من الفضلات عبر الكلى، الأمعاء، الجلد، أو الرئتين.' },
-                        { en: 'Emphysema', ar: 'النفاخ الرئوي', desc: 'مرض يصيب الرئتين ويجعل التنفس صعباً، ويعتبر مهدداً لعملية إدخال الأكسجين.' },
-                        { en: 'Dehydration', ar: 'الجفاف', desc: 'نقص كمية السوائل في الجسم عن المعدل الطبيعي المطلوب للعمليات الحيوية.' },
-                        { en: 'Nutrients', ar: 'العناصر الغذائية', desc: 'المواد الموجودة في الطعام والتي يحتاجها الجسم للنمو والبقاء.' },
-                        { en: 'Self-Esteem', ar: 'تقدير الذات', desc: 'شعور الإنسان بقيمته واحترامه لنفسه ولإنجازاته.' }
+                        { en: 'Hierarchy', ar: 'التسلسل الهرمي', desc: 'ترتيب الحاجات والمستويات حسب الأولوية.' },
+                        { en: 'Physiologic needs', ar: 'احتياجات فسيولوجية', desc: 'الحاجات الجسدية الأساسية مثل الأكسجين والماء والأكل.' },
+                        { en: 'Self-Actualization', ar: 'تحقيق الذات', desc: 'أعلى قمة في هرم ماسلو للوصول لأقصى الطاقات.' },
+                        { en: 'Primary needs', ar: 'احتياجات أساسية', desc: 'احتياجات لا غنى عنها للبقاء على قيد الحياة.' },
+                        { en: 'Secondary needs', ar: 'احتياجات ثانوية', desc: 'احتياجات يتم تلبيتها لإعطاء جودة ونوعية للحياة.' }
                     ],
                     quiz: [
-                        { q: 'According to Maslow, which of the following needs would have priority for an individual?', options: ['Be well thought of by others', 'Experience one\'s potential', 'Obtain food', 'Protect against danger'], correctIndex: 2 },
-                        { q: 'Which of the following factors can threaten the body’s need for temperature regulation?', options: ['Excessive external heat or cold', 'Severe burn', 'High internal fever', 'All of the above'], correctIndex: 3 },
-                        { q: 'Which of the following is considered the fifth (highest) level of Maslow’s hierarchy?', options: ['Self esteem needs', 'Safety and Security needs', 'Self actualization needs', 'Physiologic needs'], correctIndex: 2 },
-                        { q: 'Which of the following organs eliminate carbon dioxide (CO2) and water?', options: ['Skin', 'Lung', 'Kidney', 'Intestine'], correctIndex: 1 },
-                        { q: 'True or False: The body can survive for several weeks without fluids (water).', options: ['True', 'False'], correctIndex: 1 },
-                        { q: 'Once an essential need is met, the person experiences a need on a higher level. Is this statement True or False?', options: ['False', 'True'], correctIndex: 1 }
+                        { q: 'Which level of Maslow hierarchy must be met first?', options: ['Self-esteem', 'Safety', 'Physiologic needs', 'Love & belonging'], correctIndex: 2 },
+                        { q: 'According to Maslow, what happens once an essential need is met?', options: ['The person stops needing anything', 'The person experiences a need on a higher level', 'The person moves down the hierarchy', 'The need becomes negative'], correctIndex: 1 },
+                        { q: 'What happens if first-level (physiologic) needs are not met?', options: ['A person will have a poor quality of life', 'A person will die', 'A person will feel lonely', 'A person will lack self-esteem'], correctIndex: 1 },
+                        { q: 'Primary needs must be met to _____, while secondary needs are met to _____.', options: ['Give quality to life / sustain life', 'Sustain life / give quality to life', 'Increase self-esteem / belong to a group', 'Save money / spend money'], correctIndex: 1 }
                     ]
                 },
+
                 'lec_1_1': {
                     id: 'lec_1_1',
                     subjectId: 'sub_1',
-                    title: 'Cardiovascular System',
-                    summary: `الجهاز الدوري يتكون أساساً من القلب والأوعية الدموية. 
-                    وظيفة القلب هي ضخ الدم المحمل بالأكسجين إلى جميع أنحاء الجسم، وإعادة الدم غير المؤكسج إلى الرئتين.
-                    يتكون القلب من 4 حجرات: أذينين (Atria) وبطينين (Ventricles).`,
-                    videoUrl: 'https://www.youtube.com/embed/n4NoPxEucK4', // مثال لفيديو توضيحي
+                    title: 'Cardiovascular System Structure',
+                    arabicTitle: 'تشريح القلب والأوعية الدموية',
+                    summary: `
+                        <div class="space-y-4">
+                            <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border-r-4 border-rose-500">
+                                <h4 class="font-bold text-xl text-rose-600 mb-2">حجرات القلب (Heart Chambers)</h4>
+                                <ul class="list-disc list-inside space-y-1 font-semibold text-gray-700 dark:text-gray-300 text-sm md:text-base">
+                                    <li><strong>Right Atrium (الأذين الأيمن):</strong> يستقبل الدم غير المؤكسج من الجسم.</li>
+                                    <li><strong>Right Ventricle (البطين الأيمن):</strong> يضخ الدم للرئتين للأكسجة.</li>
+                                    <li><strong>Left Atrium (الأذين الأيسر):</strong> يستقبل الدم المؤكسج من الرئتين.</li>
+                                    <li><strong>Left Ventricle (البطين الأيسر):</strong> يضخ الدم لكل أنحاء الجسم عبر الأبهر (Aorta).</li>
+                                </ul>
+                            </div>
+                        </div>
+                    `,
                     terms: [
-                        { en: 'Tachycardia', ar: 'تسرع القلب', desc: 'زيادة معدل ضربات القلب عن الطبيعي (أكثر من 100 نبضة/دقيقة)' },
-                        { en: 'Bradycardia', ar: 'بطء القلب', desc: 'انخفاض معدل ضربات القلب عن الطبيعي (أقل من 60 نبضة/دقيقة)' },
-                        { en: 'Hypertension', ar: 'ارتفاع ضغط الدم', desc: 'زيادة الضغط داخل الأوعية الدموية بشكل مزمن' },
-                        { en: 'Hypotension', ar: 'انخفاض ضغط الدم', desc: 'انخفاض الضغط داخل الأوعية الدموية' },
-                        { en: 'Myocardium', ar: 'عضلة القلب', desc: 'الطبقة العضلية الوسطى للقلب المسؤولة عن الانقباض' },
-                        { en: 'Ischemia', ar: 'نقص التروية', desc: 'انخفاض تدفق الدم إلى الأنسجة' }
+                        { en: 'Myocardium', ar: 'عضلة القلب', desc: 'الطبقة العضلية السميكة الانقباضية للقلب.' },
+                        { en: 'Aorta', ar: 'الشريان الأبهر / الأورطي', desc: 'أكبر شريان يوزع الدم المؤكسج للجسم.' },
+                        { en: 'Atrium', ar: 'أذين القلب', desc: 'الحجرة العلوية المستقلة لاستقبال الدم.' },
+                        { en: 'Ventricle', ar: 'بطين القلب', desc: 'الحجرة السفلية المسؤولة عن ضخ الدم.' },
+                        { en: 'Pericardium', ar: 'شغاف / غشاء شغاف القلب', desc: 'الغشاء المحيط بالقلب للحماية والتشحيم.' }
                     ],
                     quiz: [
-                        { q: 'What does "Tachycardia" mean?', options: ['Slow heart rate', 'Fast heart rate', 'Normal heart rate', 'Heart attack'], correctIndex: 1 },
-                        { q: 'The term for high blood pressure is:', options: ['Hypotension', 'Hyperglycemia', 'Hypertension', 'Tachycardia'], correctIndex: 2 },
-                        { q: 'ما هو المصطلح الإنجليزي لـ "عضلة القلب"؟', options: ['Pericardium', 'Endocardium', 'Myocardium', 'Atrium'], correctIndex: 2 }
+                        { q: 'Which heart chamber pumps oxygenated blood to the entire body?', options: ['Right Atrium', 'Left Ventricle', 'Right Ventricle', 'Left Atrium'], correctIndex: 1 },
+                        { q: 'The muscular middle layer of the heart wall is called:', options: ['Epicardium', 'Endocardium', 'Myocardium', 'Pericardium'], correctIndex: 2 }
                     ]
                 },
-                'lec_3_1': {
-                    id: 'lec_3_1',
-                    subjectId: 'sub_3',
-                    title: 'Vital Signs',
-                    summary: `العلامات الحيوية هي مؤشرات أساسية لحالة الجسم الصحية. 
-                    تشمل: درجة الحرارة (Temperature)، النبض (Pulse)، معدل التنفس (Respiration)، وضغط الدم (Blood Pressure).
-                    يجب قياسها بدقة لأنها أول مؤشر على وجود مشكلة صحية للمريض.`,
+
+                'lec_1_2': {
+                    id: 'lec_1_2',
+                    subjectId: 'sub_1',
+                    title: 'Respiratory Anatomy',
+                    arabicTitle: 'تشريح الجهاز التنفسي',
+                    summary: `
+                        <div class="space-y-4">
+                            <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border-r-4 border-sky-500">
+                                <h4 class="font-bold text-xl text-sky-600 mb-2">أجزاء الجهاز التنفسي</h4>
+                                <p class="text-gray-700 dark:text-gray-300 font-semibold text-sm md:text-base leading-relaxed">
+                                    • <strong>Upper Respiratory Tract:</strong> Nose, Pharynx (البلعوم), Larynx (الحنجرة).<br>
+                                    • <strong>Lower Respiratory Tract:</strong> Trachea (القصبة الهوائية), Bronchi, Lungs, Alveoli (الحويصلات الهوائية - مكان تبادل الغازات).
+                                </p>
+                            </div>
+                        </div>
+                    `,
                     terms: [
-                        { en: 'Dyspnea', ar: 'ضيق التنفس', desc: 'صعوبة أو ألم عند التنفس' },
-                        { en: 'Apnea', ar: 'انقطاع النفس', desc: 'توقف مؤقت للتنفس' },
-                        { en: 'Pyrexia', ar: 'حمى', desc: 'ارتفاع درجة حرارة الجسم فوق المعدل الطبيعي' },
-                        { en: 'Sphygmomanometer', ar: 'جهاز قياس ضغط الدم', desc: 'الجهاز المستخدم لقياس ضغط الدم' }
+                        { en: 'Alveoli', ar: 'الحويصلات الهوائية', desc: 'أكياس مجوفه يحدث بها تبادل الأكسجين وثاني أكسيد الكربون.' },
+                        { en: 'Trachea', ar: 'القصبة الهوائية', desc: 'أنبوب غضروفي ينقل الهواء إلى الرئتين.' },
+                        { en: 'Epiglottis', ar: 'لسان المزمار', desc: 'صمام يغلق مجرى التنفس أثناء البلع لعدم دخول الطعام.' },
+                        { en: 'Diaphragm', ar: 'الحجاب الحاجز', desc: 'العضلة الرئيسية المسؤولة عن عملية الشهيق والزفير.' }
                     ],
                     quiz: [
-                        { q: 'What does "Dyspnea" mean?', options: ['Difficulty breathing', 'High fever', 'Low blood pressure', 'Fast pulse'], correctIndex: 0 },
-                        { q: 'Pyrexia is another word for:', options: ['Pain', 'Fever', 'Cough', 'Vomiting'], correctIndex: 1 }
+                        { q: 'Where does gas exchange occur in the lungs?', options: ['Trachea', 'Bronchi', 'Alveoli', 'Larynx'], correctIndex: 2 },
+                        { q: 'Which structure prevents food from entering the airway?', options: ['Pharynx', 'Epiglottis', 'Diaphragm', 'Thyroid'], correctIndex: 1 }
                     ]
                 },
-                'lec_3_2': {
-                    id: 'lec_3_2',
-                    subjectId: 'sub_3',
-                    title: 'Infection Control',
-                    summary: `<strong class="text-medical-600">مكافحة العدوى (Infection Control)</strong>
-                    هي سلسلة من الإجراءات التي يتخذها طاقم التمريض لمنع انتشار الأمراض داخل المستشفى.
-                    
-                    <strong class="text-medical-600">سلسلة العدوى (Chain of Infection):</strong>
-                    لكي تحدث العدوى، يجب أن تكتمل هذه السلسلة:
-                    1. <strong>العامل الممرض (Infectious Agent):</strong> البكتيريا أو الفيروس.
-                    2. <strong>المصدر أو الخزان (Reservoir):</strong> المكان الذي يعيش فيه الميكروب (مثل جسم الإنسان، الأسطح).
-                    3. <strong>بوابة الخروج (Portal of Exit):</strong> كيف يخرج الميكروب (مثل السعال، الدم).
-                    4. <strong>طريقة الانتقال (Mode of Transmission):</strong> كيف ينتقل (تلامس مباشر Direct contact، أو عبر الهواء Airborne).
-                    5. <strong>بوابة الدخول (Portal of Entry):</strong> كيف يدخل لجسم شخص آخر (الجروح، التنفس).
-                    6. <strong>الشخص المعرض للإصابة (Susceptible Host):</strong> مريض مناعته ضعيفة.
-                    
-                    <em class="text-red-500">ملاحظة هامة (Important Note):</em> أهم طريقة لكسر هذه السلسلة هي <strong>غسيل الأيدي (Hand Hygiene)</strong>.`,
-                    images: [
-                        { url: 'https://placehold.co/800x400/f0fdfa/14b8a6?text=Chain+of+Infection+Diagram', alt: 'رسم توضيحي لسلسلة انتقال العدوى' }
-                    ],
+
+                'lec_2_1': {
+                    id: 'lec_2_1',
+                    subjectId: 'sub_2',
+                    title: 'Nervous System & Action Potential',
+                    arabicTitle: 'الجهاز العصبي والجهد العملي',
+                    summary: `
+                        <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border-r-4 border-indigo-500 space-y-3">
+                            <h4 class="font-bold text-xl text-indigo-600">تقسيم الجهاز العصبي:</h4>
+                            <p class="text-gray-700 dark:text-gray-300 font-semibold text-sm md:text-base">
+                                1. <strong>Central Nervous System (CNS):</strong> Brain & Spinal Cord.<br>
+                                2. <strong>Peripheral Nervous System (PNS):</strong> Nerves radiating to body.
+                            </p>
+                        </div>
+                    `,
                     terms: [
-                        { en: 'Pathogen', ar: 'عامل ممرض', desc: 'أي كائن دقيق يسبب المرض (مثل البكتيريا والفيروسات).' },
-                        { en: 'Asepsis', ar: 'التعقيم / خلو من الجراثيم', desc: 'غياب الكائنات الدقيقة المسببة للأمراض.' },
-                        { en: 'Nosocomial Infection', ar: 'عدوى المستشفيات', desc: 'عدوى يكتسبها المريض أثناء تواجده في المستشفى.' },
-                        { en: 'PPE (Personal Protective Equipment)', ar: 'معدات الوقاية الشخصية', desc: 'القفازات، الكمامات، والعباءات للحماية.' }
+                        { en: 'Neuron', ar: 'الخلية العصبية', desc: 'الوحدة التركيبية والوظيفية الأساسية للجهاز العصبي.' },
+                        { en: 'Synapse', ar: 'المشبك العصبي', desc: 'منطقة الانتقال بين خليتين عصبيتين عبر الناقل الكيميائي.' },
+                        { en: 'Action Potential', ar: 'جهد الفعل / السيال', desc: 'تغير الكهربية المفاجئ عبر غشاء الخلية لنقل الإشارة.' }
                     ],
                     quiz: [
-                        { q: 'What is the most effective way to prevent the spread of infection?', options: ['Wearing gloves', 'Hand washing', 'Taking antibiotics', 'Wearing a mask'], correctIndex: 1 },
-                        { q: 'A "Nosocomial Infection" is acquired in:', options: ['At home', 'In the community', 'In a hospital', 'During travel'], correctIndex: 2 },
-                        { q: 'ما هو المصطلح الإنجليزي لـ "معدات الوقاية الشخصية"؟', options: ['Asepsis', 'PPE', 'Pathogen', 'Reservoir'], correctIndex: 1 }
+                        { q: 'The Central Nervous System (CNS) consists of:', options: ['Nerves and ganglia', 'Brain and Spinal cord', 'Autonomic nerves', 'Sensory receptors'], correctIndex: 1 }
+                    ]
+                },
+
+                'lec_2_2': {
+                    id: 'lec_2_2',
+                    subjectId: 'sub_2',
+                    title: 'Renal Physiology & Homeostasis',
+                    arabicTitle: 'وظائف الكلى والاتزان الداخلي',
+                    summary: `
+                        <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border-r-4 border-amber-500">
+                            <h4 class="font-bold text-xl text-amber-600 mb-2">وحدة ترشيح الكلى (Nephron)</h4>
+                            <p class="text-gray-700 dark:text-gray-300 font-semibold text-sm">
+                                النفرون هو الوحدة الوظيفية بالكلى المكونة من الكبيبة (Glomerulus) والأنابيب الكلوية لتنقيه الدم وإفراز البول.
+                            </p>
+                        </div>
+                    `,
+                    terms: [
+                        { en: 'Nephron', ar: 'النفرون', desc: 'أنبوب ترشيح مجهري دقيق يصنع البول ويصفي الدم.' },
+                        { en: 'Homeostasis', ar: 'الاتزان الداخلي', desc: 'حفظ استقرار البيئة الداخلية للجسم والضغط والسوائل.' },
+                        { en: 'Filtration', ar: 'الترشيح', desc: 'مرور السوائل والمواد القابلة للذوبان من خلال غشاء النفرون.' }
+                    ],
+                    quiz: [
+                        { q: 'What is the functional unit of the kidney?', options: ['Neuron', 'Nephron', 'Alveolus', 'Hepatocyte'], correctIndex: 1 }
+                    ]
+                },
+
+                'lec_4_1': {
+                    id: 'lec_4_1',
+                    subjectId: 'sub_4',
+                    title: 'Word Building & Prefixes Suffixes',
+                    arabicTitle: 'البادئات واللاحقات في الطب',
+                    summary: `
+                        <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm space-y-3">
+                            <h4 class="font-bold text-xl text-sky-600">تكوين الكلمة الطبية:</h4>
+                            <p class="text-gray-700 dark:text-gray-300 font-semibold text-sm">
+                                • <strong>Prefix (البادئة):</strong> توضع بالبداية (مثل Hyper- = زيادة).<br>
+                                • <strong>Root (أصل الكلمة):</strong> الجزء الأساسي (مثل Cardi/o = قلب).<br>
+                                • <strong>Suffix (اللاحقة):</strong> توضع بالنهاية (مثل -itis = التهاب).
+                            </p>
+                        </div>
+                    `,
+                    terms: [
+                        { en: 'Carditis', ar: 'التهاب القلب', desc: 'الكلمة تتكون من Cardi (قلب) + itis (التهاب).' },
+                        { en: 'Hyperglycemia', ar: 'ارتفاع سكر الدم', desc: 'Hyper (ارتفاع) + glyc (سكر) + emia (في الدم).' },
+                        { en: 'Gastrectomy', ar: 'استئصال المعدة', desc: 'Gastr (معدة) + ectomy (استئصال جراحي).' }
+                    ],
+                    quiz: [
+                        { q: 'What does the medical suffix "-itis" mean?', options: ['Surgical removal', 'Inflammation', 'Pain', 'Enlargement'], correctIndex: 1 },
+                        { q: 'The prefix "Hyper-" means:', options: ['Below or low', 'Above or excessive', 'Fast', 'Slow'], correctIndex: 1 }
+                    ]
+                },
+
+                'lec_4_2': {
+                    id: 'lec_4_2',
+                    subjectId: 'sub_4',
+                    title: 'Anatomical Positions & Directions',
+                    arabicTitle: 'الأتجاهات والمصطلحات التشريحية',
+                    summary: `
+                        <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border-r-4 border-blue-500">
+                            <h4 class="font-bold text-xl text-blue-600 mb-2">المستويات والاتجاهات:</h4>
+                            <p class="text-gray-700 dark:text-gray-300 font-semibold text-sm leading-relaxed">
+                                • <strong>Anterior / Ventral:</strong> أمامي.<br>
+                                • <strong>Posterior / Dorsal:</strong> خلفي.<br>
+                                • <strong>Superior:</strong> علوي قريبي من الرأس.<br>
+                                • <strong>Inferior:</strong> سفلي قريبي من القدمين.
+                            </p>
+                        </div>
+                    `,
+                    terms: [
+                        { en: 'Anterior', ar: 'أمامي', desc: 'باتجاه مقدمة الجسم.' },
+                        { en: 'Posterior', ar: 'خلفي', desc: 'باتجاه الجزء الخلفي للجسم.' },
+                        { en: 'Proximal', ar: 'قريب', desc: 'أقرب لنقطة اتصال الطرف بالجذع.' },
+                        { en: 'Distal', ar: 'بعيد', desc: 'أبعد عن نقطة اتصال الطرف بالجذع.' }
+                    ],
+                    quiz: [
+                        { q: 'Which directional term means "towards the front of the body"?', options: ['Posterior', 'Anterior', 'Superior', 'Inferior'], correctIndex: 1 }
                     ]
                 }
             }
         };
 
-        // DOM Elements
         const appContent = document.getElementById('app-content');
+        let completedLectures = JSON.parse(localStorage.getItem('nurse_hub_completed') || '[]');
 
-        // ---------------------------------------------------------
-        // 2. دوال عرض الواجهات (Rendering Functions)
-        // ---------------------------------------------------------
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+            const isDark = document.documentElement.classList.contains('dark');
+            localStorage.setItem('nurse_hub_theme', isDark ? 'dark' : 'light');
+        }
 
-        // عرض الصفحة الرئيسية
+        // Apply saved theme on load
+        if (localStorage.getItem('nurse_hub_theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.9;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
         function renderHome() {
             let html = `
-                <div class="fade-in text-center py-10">
-                    <h1 class="text-4xl md:text-5xl font-extrabold text-medical-900 mb-4">ذاكر التمريض بطريقة أسهل 🩺</h1>
-                    <p class="text-lg text-gray-600 max-w-2xl mx-auto mb-10">مرحباً بك في منصتك الخاصة. هنا قمنا بتبسيط المحاضرات الإنجليزية، ترجمة المصطلحات، وتجهيز اختبارات وألعاب لتثبيت حفظك.</p>
-                    
-                    <h2 class="text-2xl font-bold text-gray-800 mb-6 text-right">المواد الدراسية</h2>
+                <div class="fade-in text-center py-6">
+                    <div class="max-w-3xl mx-auto mb-10">
+                        <h1 class="text-3xl md:text-5xl font-black text-medical-900 dark:text-white mb-4 leading-tight">ذاكر التمريض بكل سهولة بذكاء وحب 🩺</h1>
+                        <p class="text-gray-600 dark:text-gray-300 text-base md:text-lg font-medium leading-relaxed">
+                            جميع المواد الدراسية، الشروحات المبسطة، المصطلحات الطبية المزودة بالنطق الصوتي، والاختبارات التفاعلية مجتمعة في مكان واحد.
+                        </p>
+                    </div>
+
+                    <!-- Progress Banner -->
+                    <div class="bg-gradient-to-r from-medical-600 to-teal-700 text-white rounded-3xl p-6 mb-10 shadow-lg text-right flex flex-col md:flex-row justify-between items-center gap-4">
+                        <div>
+                            <h3 class="text-xl font-bold mb-1">مستوى إنجازك الدراسي 📈</h3>
+                            <p class="text-medical-100 text-sm">لقد أنهيت حتى الآن ${completedLectures.length} محاضرة من أصل 8 محاضرات متاحة.</p>
+                        </div>
+                        <button onclick="renderProgress()" class="bg-white text-medical-800 font-bold px-6 py-3 rounded-2xl hover:bg-medical-50 transition shadow">
+                            عرض التفاصيل <i class="fa-solid fa-arrow-left mr-2"></i>
+                        </button>
+                    </div>
+
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6 text-right flex items-center">
+                        <i class="fa-solid fa-graduation-cap text-medical-500 ml-2"></i> المواد الدراسية الرئيسية
+                    </h2>
+
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             `;
 
             data.subjects.forEach(sub => {
+                const subLectures = data.lectures[sub.id] || [];
+                const completedInSub = subLectures.filter(l => completedLectures.includes(l.id)).length;
+
                 html += `
-                    <div onclick="renderSubject('${sub.id}')" class="bg-white rounded-xl shadow-sm hover:shadow-lg transition cursor-pointer p-6 border border-gray-100 flex flex-col items-center group">
-                        <div class="w-16 h-16 bg-medical-50 rounded-full flex items-center justify-center mb-4 group-hover:bg-medical-500 transition duration-300">
-                            <i class="fa-solid ${sub.icon} text-3xl text-medical-600 group-hover:text-white transition"></i>
+                    <div onclick="renderSubject('${sub.id}')" class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer border border-gray-100 dark:border-slate-700 flex flex-col items-center group relative overflow-hidden transform hover:-translate-y-1">
+                        <div class="w-16 h-16 bg-gradient-to-tr ${sub.color} rounded-2xl flex items-center justify-center mb-4 text-white shadow-md group-hover:scale-110 transition duration-300">
+                            <i class="fa-solid ${sub.icon} text-2xl"></i>
                         </div>
-                        <h3 class="font-bold text-xl text-gray-800">${sub.name}</h3>
-                        <p class="text-medical-600 font-semibold">${sub.arabicName}</p>
+                        <h3 class="font-extrabold text-xl text-gray-800 dark:text-white mb-1">${sub.name}</h3>
+                        <p class="text-medical-600 dark:text-medical-400 font-bold text-sm mb-4">${sub.arabicName}</p>
+
+                        <div class="w-full bg-gray-100 dark:bg-slate-700 rounded-full h-2 overflow-hidden mt-auto">
+                            <div class="bg-medical-500 h-2 rounded-full transition-all duration-500" style="width: ${(completedInSub / (subLectures.length || 1)) * 100}%"></div>
+                        </div>
+                        <span class="text-xs font-semibold text-gray-500 dark:text-gray-400 mt-2">${completedInSub} / ${subLectures.length} مكتملة</span>
                     </div>
                 `;
             });
@@ -657,130 +812,130 @@
             appContent.innerHTML = html;
         }
 
-        // عرض محاضرات مادة معينة
         function renderSubject(subjectId) {
             const subject = data.subjects.find(s => s.id === subjectId);
             const lecs = data.lectures[subjectId] || [];
 
             let html = `
-                <div class="fade-in">
-                    <button onclick="renderHome()" class="mb-6 text-medical-600 hover:text-medical-800 font-semibold flex items-center">
-                        <i class="fa-solid fa-arrow-right ml-2"></i> العودة للمواد
+                <div class="fade-in max-w-5xl mx-auto">
+                    <button onclick="renderHome()" class="mb-6 text-medical-600 dark:text-medical-400 font-bold flex items-center hover:underline">
+                        <i class="fa-solid fa-arrow-right ml-2"></i> العودة للرئيسية
                     </button>
-                    <h2 class="text-3xl font-bold text-medical-900 mb-2">${subject.name}</h2>
-                    <p class="text-gray-500 mb-8">${subject.arabicName}</p>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100 dark:border-slate-700 mb-8 flex items-center justify-between">
+                        <div>
+                            <h2 class="text-3xl font-black text-gray-900 dark:text-white mb-1" dir="ltr">${subject.name}</h2>
+                            <p class="text-medical-600 dark:text-medical-400 font-bold text-lg">${subject.arabicName}</p>
+                        </div>
+                        <div class="w-16 h-16 bg-medical-50 dark:bg-slate-700 text-medical-500 rounded-2xl flex items-center justify-center text-3xl">
+                            <i class="fa-solid ${subject.icon}"></i>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
             `;
 
-            if(lecs.length === 0) {
-                html += `<div class="col-span-full text-center text-gray-500 py-10 bg-white rounded-xl shadow-sm">لا توجد محاضرات مضافة لهذه المادة حتى الآن.</div>`;
-            } else {
-                lecs.forEach((lec, index) => {
-                    html += `
-                        <div onclick="renderLecture('${lec.id}')" class="bg-white p-5 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer border border-gray-100 flex items-center justify-between">
-                            <div>
-                                <h3 class="font-bold text-lg text-gray-800 text-left" dir="ltr">Lecture ${index + 1}: ${lec.title}</h3>
-                                <p class="text-gray-500 text-sm mt-1">${lec.arabicTitle}</p>
+            lecs.forEach((lec, index) => {
+                const isCompleted = completedLectures.includes(lec.id);
+                html += `
+                    <div onclick="renderLecture('${lec.id}')" class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm hover:shadow-md transition cursor-pointer border ${isCompleted ? 'border-emerald-300 dark:border-emerald-700/50' : 'border-gray-100 dark:border-slate-700'} flex items-center justify-between group">
+                        <div class="flex items-center space-x-4 space-x-reverse">
+                            <div class="w-10 h-10 rounded-xl ${isCompleted ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/40 dark:text-emerald-400' : 'bg-gray-100 text-gray-500 dark:bg-slate-700 dark:text-gray-300'} flex items-center justify-center font-bold">
+                                ${isCompleted ? '<i class="fa-solid fa-check"></i>' : index + 1}
                             </div>
-                            <div class="bg-medical-50 p-3 rounded-lg text-medical-600">
-                                <i class="fa-solid fa-book-open"></i>
+                            <div>
+                                <h3 class="font-bold text-lg text-gray-800 dark:text-gray-100 group-hover:text-medical-600 dark:group-hover:text-medical-400 transition" dir="ltr">${lec.title}</h3>
+                                <p class="text-gray-500 dark:text-gray-400 text-sm">${lec.arabicTitle}</p>
                             </div>
                         </div>
-                    `;
-                });
-            }
+                        <i class="fa-solid fa-chevron-left text-gray-400 group-hover:text-medical-500 transition"></i>
+                    </div>
+                `;
+            });
 
             html += `</div></div>`;
             appContent.innerHTML = html;
         }
 
-        // عرض صفحة المحاضرة
         function renderLecture(lectureId) {
             const lecDetails = data.lectureDetails[lectureId];
             if(!lecDetails) {
-                alert("بيانات هذه المحاضرة غير مكتملة في النسخة التجريبية.");
+                appContent.innerHTML = `<div class="text-center py-20 font-bold text-gray-500">جاري إعداد محتوى هذه المحاضرة...</div>`;
                 return;
             }
 
             const subject = data.subjects.find(s => s.id === lecDetails.subjectId);
+            const isCompleted = completedLectures.includes(lectureId);
 
             let html = `
-                <div class="fade-in pb-10">
-                    <button onclick="renderSubject('${subject.id}')" class="mb-6 text-medical-600 hover:text-medical-800 font-semibold flex items-center">
-                        <i class="fa-solid fa-arrow-right ml-2"></i> العودة لمحاضرات ${subject.name}
-                    </button>
-                    
-                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-8">
-                        <div class="bg-medical-600 p-6 text-white">
-                            <h2 class="text-2xl font-bold" dir="ltr">${lecDetails.title}</h2>
-                            <p class="opacity-90 mt-1">${lecDetails.arabicTitle}</p>
-                        </div>
-                        
-                        <div class="p-6">
-                            <h3 class="text-xl font-bold text-gray-800 mb-3 flex items-center"><i class="fa-solid fa-file-pdf text-red-500 ml-2"></i> الملفات والملخص</h3>
-                            <button class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-semibold transition mb-4">
-                                <i class="fa-solid fa-download ml-2"></i> تحميل PDF المحاضرة الأصلي
-                            </button>
-                            
-                            <div class="bg-blue-50 border border-blue-100 p-4 rounded-xl">
-                                <h4 class="font-bold text-blue-800 mb-2">🧠 الخلاصة والشرح المبسط:</h4>
-                                <p class="text-gray-700 leading-relaxed">${lecDetails.summary.replace(/\n/g, '<br>')}</p>
-                            </div>
+                <div class="fade-in max-w-5xl mx-auto pb-10">
+                    <div class="flex justify-between items-center mb-6">
+                        <button onclick="renderSubject('${subject.id}')" class="text-medical-600 dark:text-medical-400 font-bold flex items-center hover:underline">
+                            <i class="fa-solid fa-arrow-right ml-2"></i> العودة لمحاضرات ${subject.name}
+                        </button>
+                        <button onclick="toggleLectureCompletion('${lectureId}')" class="${isCompleted ? 'bg-emerald-500 text-white' : 'bg-gray-200 dark:bg-slate-700 text-gray-700 dark:text-gray-200'} font-bold px-4 py-2 rounded-xl text-sm transition flex items-center">
+                            <i class="fa-solid ${isCompleted ? 'fa-circle-check' : 'fa-circle'} ml-2"></i>
+                            ${isCompleted ? 'تم إكمال المحاضرة بنجاح' : 'تحديد كمكتملة'}
+                        </button>
+                    </div>
 
-                            ${lecDetails.images && lecDetails.images.length > 0 ? `
-                                <div class="mt-6 space-y-4">
-                                    <h4 class="font-bold text-gray-800 mb-2"><i class="fa-regular fa-image text-medical-500 mr-2"></i> صور توضيحية:</h4>
-                                    ${lecDetails.images.map(img => `
-                                        <div class="rounded-xl overflow-hidden border border-gray-200 shadow-sm">
-                                            <img src="${img.url}" alt="${img.alt}" class="w-full h-auto object-cover">
-                                            <p class="text-center text-sm text-gray-500 bg-gray-50 py-2">${img.alt}</p>
-                                        </div>
-                                    `).join('')}
-                                </div>
-                            ` : ''}
+                    <div class="bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-gray-100 dark:border-slate-700 overflow-hidden mb-8">
+                        <div class="bg-gradient-to-r from-medical-600 to-teal-700 p-6 md:p-8 text-white">
+                            <h2 class="text-2xl md:text-3xl font-black" dir="ltr">${lecDetails.title}</h2>
+                            <p class="text-medical-100 font-bold mt-1 text-lg">${lecDetails.arabicTitle}</p>
+                        </div>
+
+                        <div class="p-6 md:p-8">
+                            <h3 class="text-xl font-bold text-gray-800 dark:text-gray-100 mb-4 flex items-center">
+                                <i class="fa-solid fa-brain text-medical-500 ml-2"></i> الملخص والشرح المبسط
+                            </h3>
+                            <div class="text-gray-700 dark:text-gray-200 leading-relaxed font-medium">
+                                ${lecDetails.summary}
+                            </div>
                         </div>
                     </div>
 
+                    <!-- Terms & Interactive section -->
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                        <!-- المصطلحات -->
                         <div class="lg:col-span-2">
-                            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                                <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center"><i class="fa-solid fa-language text-medical-500 ml-2"></i> أهم المصطلحات (Medical Terms)</h3>
-                                <div class="space-y-3">
-                                    ${lecDetails.terms.map(term => `
-                                        <div class="border-b border-gray-100 pb-3 last:border-0">
-                                            <div class="flex justify-between items-center mb-1">
-                                                <span class="font-bold text-lg text-gray-800" dir="ltr">${term.en}</span>
-                                                <span class="font-bold text-medical-600">${term.ar}</span>
+                            <div class="bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-gray-100 dark:border-slate-700 p-6">
+                                <h3 class="text-xl font-bold text-gray-800 dark:text-gray-100 mb-4 flex items-center">
+                                    <i class="fa-solid fa-list-ul text-medical-500 ml-2"></i> المصطلحات الطبية للمحاضرة
+                                </h3>
+                                <div class="space-y-4">
+                                    ${lecDetails.terms.map(t => `
+                                        <div class="p-4 bg-slate-50 dark:bg-slate-700/50 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-2 border border-slate-100 dark:border-slate-700">
+                                            <div>
+                                                <div class="flex items-center space-x-2 space-x-reverse">
+                                                    <span class="font-extrabold text-lg text-medical-900 dark:text-medical-300" dir="ltr">${t.en}</span>
+                                                    <button onclick="speakText('${t.en.replace(/'/g, "\\'")}')" class="text-medical-500 hover:text-medical-600 p-1" title="استمع للنطق">
+                                                        <i class="fa-solid fa-volume-high"></i>
+                                                    </button>
+                                                </div>
+                                                <p class="text-gray-500 dark:text-gray-400 text-xs mt-1">${t.desc}</p>
                                             </div>
-                                            <p class="text-gray-500 text-sm">${term.desc}</p>
+                                            <span class="font-bold text-medical-600 dark:text-medical-400 text-sm bg-white dark:bg-slate-800 px-3 py-1.5 rounded-xl shadow-sm self-start sm:self-center">${t.ar}</span>
                                         </div>
                                     `).join('')}
                                 </div>
                             </div>
-                            
-                            ${lecDetails.videoUrl ? `
-                            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mt-8">
-                                <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center"><i class="fa-solid fa-play-circle text-red-500 ml-2"></i> فيديو توضيحي</h3>
-                                <div class="aspect-w-16 aspect-h-9">
-                                    <iframe class="w-full h-64 md:h-96 rounded-xl" src="${lecDetails.videoUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                                </div>
-                            </div>
-                            ` : ''}
                         </div>
 
-                        <!-- أدوات التفاعل -->
+                        <!-- Action Controls (Updated with new games) -->
                         <div>
-                            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sticky top-20">
-                                <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">اختبر نفسك</h3>
+                            <div class="bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-gray-100 dark:border-slate-700 p-6 sticky top-20 text-center space-y-4">
+                                <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100">أنشطة المذاكرة والألعاب</h3>
                                 
-                                <button onclick="startQuiz('${lectureId}')" class="w-full mb-4 bg-medical-500 hover:bg-medical-600 text-white py-3 rounded-xl font-bold transition flex justify-center items-center">
-                                    <i class="fa-solid fa-list-check ml-2"></i> ابدأ Quiz المحاضرة
+                                <button onclick="startQuiz('${lectureId}')" class="w-full bg-medical-500 hover:bg-medical-600 text-white font-bold py-3.5 px-4 rounded-2xl shadow-md transition flex items-center justify-center">
+                                    <i class="fa-solid fa-vial ml-2"></i> الاختبار التفاعلي (Quiz)
+                                </button>
+
+                                <button onclick="startGame('${lectureId}')" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-3.5 px-4 rounded-2xl shadow-md transition flex items-center justify-center">
+                                    <i class="fa-solid fa-bolt ml-2"></i> تحدي السرعة 🔥
                                 </button>
                                 
-                                <button onclick="startGame('${lectureId}')" class="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl font-bold transition flex justify-center items-center">
-                                    <i class="fa-solid fa-gamepad ml-2"></i> لعبة الكلمات 🔥
+                                <button onclick="startHangman('${lectureId}')" class="w-full bg-rose-500 hover:bg-rose-600 text-white font-bold py-3.5 px-4 rounded-2xl shadow-md transition flex items-center justify-center">
+                                    <i class="fa-solid fa-staff-snake ml-2"></i> إنقاذ المريض 🚑
                                 </button>
                             </div>
                         </div>
@@ -790,41 +945,115 @@
             appContent.innerHTML = html;
         }
 
-        // قاموس المصطلحات
-        function renderDictionary() {
-            let allTerms = [];
-            // تجميع كل المصطلحات من كل المحاضرات
+        function toggleLectureCompletion(lectureId) {
+            if (completedLectures.includes(lectureId)) {
+                completedLectures = completedLectures.filter(id => id !== lectureId);
+            } else {
+                completedLectures.push(lectureId);
+            }
+            localStorage.setItem('nurse_hub_completed', JSON.stringify(completedLectures));
+            renderLecture(lectureId);
+        }
+
+        let flashcardIndex = 0;
+        let allAppTerms = [];
+
+        function renderFlashcards() {
+            allAppTerms = [];
             Object.values(data.lectureDetails).forEach(lec => {
-                allTerms = allTerms.concat(lec.terms);
+                if (lec.terms) allAppTerms.push(...lec.terms);
             });
 
-            // إزالة التكرار إن وجد بناءً على الكلمة الإنجليزية
-            const uniqueTerms = Array.from(new Set(allTerms.map(a => a.en)))
-                .map(en => {
-                    return allTerms.find(a => a.en === en)
-                }).sort((a, b) => a.en.localeCompare(b.en)); // ترتيب أبجدي
+            if (allAppTerms.length === 0) return;
+            flashcardIndex = 0;
+            renderSingleFlashcard();
+        }
 
+        function renderSingleFlashcard() {
+            const card = allAppTerms[flashcardIndex];
             let html = `
-                <div class="fade-in max-w-4xl mx-auto">
-                    <h2 class="text-3xl font-bold text-medical-900 mb-6 text-center">قاموس المصطلحات الطبية</h2>
-                    
-                    <div class="relative mb-8">
-                        <input type="text" id="searchInput" onkeyup="filterDictionary()" placeholder="ابحث بالإنجليزية أو العربية..." class="w-full p-4 pr-12 rounded-xl border border-gray-300 focus:outline-none focus:border-medical-500 focus:ring-1 focus:ring-medical-500 shadow-sm text-lg">
-                        <i class="fa-solid fa-search absolute right-4 top-5 text-gray-400 text-xl"></i>
+                <div class="fade-in max-w-2xl mx-auto py-8">
+                    <h2 class="text-3xl font-black text-center text-medical-900 dark:text-white mb-2">بطاقات الذاكرة السريعة 🎴</h2>
+                    <p class="text-center text-gray-500 dark:text-gray-400 mb-8 font-semibold text-sm">اضغط على البطاقة لقلبها واكتشاف المعنى والشرح</p>
+
+                    <!-- Flashcard Flip Element -->
+                    <div onclick="this.querySelector('.card-inner').classList.toggle('rotate-y-180')" class="perspective-1000 w-full h-80 cursor-pointer mb-8">
+                        <div class="card-inner transform-style-3d transition-transform duration-500 w-full h-full relative shadow-xl rounded-3xl">
+                            <!-- Front -->
+                            <div class="backface-hidden absolute inset-0 bg-gradient-to-br from-medical-500 to-teal-700 text-white rounded-3xl p-8 flex flex-col items-center justify-center text-center">
+                                <span class="text-xs bg-white/20 px-3 py-1 rounded-full mb-4">English Term</span>
+                                <h3 class="text-4xl font-extrabold mb-4" dir="ltr">${card.en}</h3>
+                                <button onclick="event.stopPropagation(); speakText('${card.en.replace(/'/g, "\\'")}')" class="bg-white/20 hover:bg-white/30 p-3 rounded-full text-white text-lg">
+                                    <i class="fa-solid fa-volume-high"></i>
+                                </button>
+                            </div>
+                            <!-- Back -->
+                            <div class="rotate-y-180 backface-hidden absolute inset-0 bg-white dark:bg-slate-800 text-gray-800 dark:text-gray-100 rounded-3xl p-8 border-2 border-medical-500 flex flex-col items-center justify-center text-center">
+                                <span class="text-xs bg-medical-100 dark:bg-slate-700 text-medical-800 dark:text-medical-300 font-bold px-3 py-1 rounded-full mb-3">الترجمة والشرح</span>
+                                <h3 class="text-3xl font-black text-medical-600 dark:text-medical-400 mb-3">${card.ar}</h3>
+                                <p class="text-gray-600 dark:text-gray-300 font-medium text-sm max-w-md">${card.desc}</p>
+                            </div>
+                        </div>
                     </div>
 
-                    <div id="dictionaryList" class="space-y-4">
-                        ${uniqueTerms.map(term => `
-                            <div class="term-card bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col md:flex-row md:items-center justify-between">
-                                <div class="mb-2 md:mb-0 w-full md:w-1/3 text-left">
-                                    <span class="en-term font-bold text-xl text-gray-800" dir="ltr">${term.en}</span>
+                    <!-- Navigation Controls -->
+                    <div class="flex justify-between items-center bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-700">
+                        <button onclick="prevFlashcard()" class="px-5 py-2.5 rounded-xl bg-gray-100 dark:bg-slate-700 hover:bg-medical-500 hover:text-white font-bold transition">
+                            <i class="fa-solid fa-arrow-right ml-2"></i> السابقة
+                        </button>
+                        <span class="font-bold text-gray-500 text-sm">${flashcardIndex + 1} من ${allAppTerms.length}</span>
+                        <button onclick="nextFlashcard()" class="px-5 py-2.5 rounded-xl bg-gray-100 dark:bg-slate-700 hover:bg-medical-500 hover:text-white font-bold transition">
+                            التالية <i class="fa-solid fa-arrow-left mr-2"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            appContent.innerHTML = html;
+        }
+
+        function nextFlashcard() {
+            flashcardIndex = (flashcardIndex + 1) % allAppTerms.length;
+            renderSingleFlashcard();
+        }
+
+        function prevFlashcard() {
+            flashcardIndex = (flashcardIndex - 1 + allAppTerms.length) % allAppTerms.length;
+            renderSingleFlashcard();
+        }
+
+        function renderDictionary() {
+            let terms = [];
+            Object.values(data.lectureDetails).forEach(lec => {
+                if (lec.terms) terms.push(...lec.terms);
+            });
+
+            // Remove duplicates
+            const uniqueTerms = Array.from(new Set(terms.map(t => t.en)))
+                .map(en => terms.find(t => t.en === en))
+                .sort((a,b) => a.en.localeCompare(b.en));
+
+            let html = `
+                <div class="fade-in max-w-4xl mx-auto py-6">
+                    <h2 class="text-3xl font-black text-center text-medical-900 dark:text-white mb-6">قاموس المصطلحات الطبية الشامل 📖</h2>
+
+                    <div class="relative mb-8">
+                        <input type="text" id="searchInput" onkeyup="filterDictionary()" placeholder="ابحث عن أي مصطلح بالإنجليزية أو العربية..." class="w-full p-4 pr-12 rounded-2xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-medical-500 text-lg shadow-sm">
+                        <i class="fa-solid fa-magnifying-glass absolute right-4 top-5 text-gray-400 text-xl"></i>
+                    </div>
+
+                    <div id="dictionaryList" class="space-y-3">
+                        ${uniqueTerms.map(t => `
+                            <div class="term-card bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-700 flex flex-col md:flex-row md:items-center justify-between gap-3">
+                                <div class="flex items-center space-x-3 space-x-reverse">
+                                    <button onclick="speakText('${t.en.replace(/'/g, "\\'")}')" class="text-medical-500 hover:text-medical-600 p-2 bg-medical-50 dark:bg-slate-700 rounded-xl" title="استمع للنطق">
+                                        <i class="fa-solid fa-volume-high text-lg"></i>
+                                    </button>
+                                    <div>
+                                        <span class="en-term font-extrabold text-lg text-gray-900 dark:text-white block" dir="ltr">${t.en}</span>
+                                        <span class="desc-term text-gray-500 dark:text-gray-400 text-xs">${t.desc}</span>
+                                    </div>
                                 </div>
-                                <div class="w-full md:w-1/4 mb-2 md:mb-0">
-                                    <span class="ar-term font-bold text-medical-600 bg-medical-50 px-3 py-1 rounded-full text-sm">${term.ar}</span>
-                                </div>
-                                <div class="w-full md:w-1/2 text-gray-600 text-sm">
-                                    <span class="desc-term">${term.desc}</span>
-                                </div>
+                                <span class="ar-term font-bold text-medical-600 dark:text-medical-400 bg-teal-50 dark:bg-slate-700/60 px-4 py-2 rounded-xl text-sm self-start md:self-center">${t.ar}</span>
                             </div>
                         `).join('')}
                     </div>
@@ -836,23 +1065,57 @@
         function filterDictionary() {
             let input = document.getElementById('searchInput').value.toLowerCase();
             let cards = document.getElementsByClassName('term-card');
-            
-            for (let i = 0; i < cards.length; i++) {
-                let en = cards[i].querySelector('.en-term').innerText.toLowerCase();
-                let ar = cards[i].querySelector('.ar-term').innerText.toLowerCase();
-                let desc = cards[i].querySelector('.desc-term').innerText.toLowerCase();
-                
+            for (let card of cards) {
+                let en = card.querySelector('.en-term').innerText.toLowerCase();
+                let ar = card.querySelector('.ar-term').innerText.toLowerCase();
+                let desc = card.querySelector('.desc-term').innerText.toLowerCase();
                 if (en.includes(input) || ar.includes(input) || desc.includes(input)) {
-                    cards[i].style.display = "flex";
+                    card.style.display = "flex";
                 } else {
-                    cards[i].style.display = "none";
+                    card.style.display = "none";
                 }
             }
         }
 
-        // ---------------------------------------------------------
-        // 3. نظام الاختبارات (Quiz System)
-        // ---------------------------------------------------------
+        function renderProgress() {
+            let totalLectures = 0;
+            Object.values(data.lectures).forEach(arr => totalLectures += arr.length);
+            const percentage = Math.round((completedLectures.length / totalLectures) * 100);
+
+            let html = `
+                <div class="fade-in max-w-3xl mx-auto py-8">
+                    <h2 class="text-3xl font-black text-center text-medical-900 dark:text-white mb-8">سجل الإنجاز والتقدم الدراسي 📊</h2>
+
+                    <div class="bg-white dark:bg-slate-800 rounded-3xl p-8 shadow-sm border border-gray-100 dark:border-slate-700 mb-8 text-center">
+                        <div class="inline-flex items-center justify-center w-32 h-32 rounded-full border-8 border-medical-500 text-3xl font-black text-medical-600 dark:text-medical-400 mb-4">
+                            ${percentage}%
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 dark:text-gray-100">معدل إنهاء المقررات</h3>
+                        <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">أنهيت ${completedLectures.length} من أصل ${totalLectures} محاضرات بنجاح.</p>
+                    </div>
+
+                    <div class="space-y-4">
+                        ${data.subjects.map(s => {
+                            const lecs = data.lectures[s.id] || [];
+                            const done = lecs.filter(l => completedLectures.includes(l.id)).length;
+                            return `
+                                <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-gray-100 dark:border-slate-700 flex justify-between items-center">
+                                    <div>
+                                        <h4 class="font-bold text-gray-800 dark:text-gray-100" dir="ltr">${s.name}</h4>
+                                        <p class="text-xs text-gray-500">${done} من ${lecs.length} محاضرات مكتملة</p>
+                                    </div>
+                                    <span class="font-bold text-sm px-3 py-1 rounded-xl ${done === lecs.length ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-600'}">
+                                        ${done === lecs.length ? 'مكتمل ✨' : 'قيد التقدم'}
+                                    </span>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+            appContent.innerHTML = html;
+        }
+
         let currentQuiz = [];
         let currentQuestionIndex = 0;
         let score = 0;
@@ -860,7 +1123,11 @@
 
         function startQuiz(lectureId) {
             activeLectureId = lectureId;
-            currentQuiz = data.lectureDetails[lectureId].quiz;
+            currentQuiz = data.lectureDetails[lectureId].quiz || [];
+            if (currentQuiz.length === 0) {
+                alert('لا توجد أسئلة متوفرة حالياً لهذه المحاضرة.');
+                return;
+            }
             currentQuestionIndex = 0;
             score = 0;
             renderQuizQuestion();
@@ -873,32 +1140,31 @@
             }
 
             const q = currentQuiz[currentQuestionIndex];
-            
             let html = `
-                <div class="fade-in max-w-2xl mx-auto mt-10">
-                    <button onclick="renderLecture('${activeLectureId}')" class="mb-6 text-gray-500 hover:text-gray-800 flex items-center">
-                        <i class="fa-solid fa-times ml-2"></i> إنهاء وخروج
+                <div class="fade-in max-w-2xl mx-auto py-8">
+                    <button onclick="renderLecture('${activeLectureId}')" class="mb-4 text-gray-500 hover:text-gray-800 font-bold text-sm">
+                        <i class="fa-solid fa-xmark ml-1"></i> خروج من الاختبار
                     </button>
-                    
-                    <div class="bg-white rounded-2xl shadow-md p-8 border border-gray-100">
+
+                    <div class="bg-white dark:bg-slate-800 rounded-3xl shadow-lg p-6 md:p-8 border border-gray-100 dark:border-slate-700">
                         <div class="flex justify-between items-center mb-6">
-                            <span class="text-gray-500 font-semibold">سؤال ${currentQuestionIndex + 1} من ${currentQuiz.length}</span>
-                            <span class="bg-medical-100 text-medical-800 px-3 py-1 rounded-full text-sm font-bold">النتيجة: ${score}</span>
+                            <span class="text-sm font-bold text-gray-400">سؤال ${currentQuestionIndex + 1} من ${currentQuiz.length}</span>
+                            <span class="bg-medical-100 text-medical-800 text-xs font-bold px-3 py-1 rounded-full">النقاط: ${score}</span>
                         </div>
-                        
-                        <h2 class="text-2xl font-bold text-gray-800 mb-8" dir="auto">${q.q}</h2>
-                        
+
+                        <h3 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-6" dir="auto">${q.q}</h3>
+
                         <div class="space-y-3" id="options-container">
-                            ${q.options.map((opt, index) => `
-                                <button onclick="checkAnswer(${index}, ${q.correctIndex})" class="quiz-btn w-full text-left bg-gray-50 hover:bg-gray-100 border border-gray-200 p-4 rounded-xl font-semibold text-gray-700 transition" dir="auto">
-                                    ${String.fromCharCode(65 + index)}. ${opt}
+                            ${q.options.map((opt, i) => `
+                                <button onclick="checkAnswer(${i}, ${q.correctIndex})" class="quiz-btn w-full text-left bg-slate-50 dark:bg-slate-700/50 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-600 p-4 rounded-2xl font-semibold text-gray-800 dark:text-gray-100 transition" dir="auto">
+                                    ${String.fromCharCode(65 + i)}. ${opt}
                                 </button>
                             `).join('')}
                         </div>
-                        
-                        <div id="feedback" class="mt-6 hidden text-center font-bold text-lg rounded-lg p-3"></div>
-                        
-                        <button id="next-btn" onclick="nextQuestion()" class="hidden w-full mt-6 bg-medical-600 hover:bg-medical-700 text-white py-3 rounded-xl font-bold transition">
+
+                        <div id="feedback" class="mt-6 hidden text-center font-bold text-base rounded-xl p-3"></div>
+
+                        <button id="next-btn" onclick="nextQuestion()" class="hidden w-full mt-6 bg-medical-500 hover:bg-medical-600 text-white font-bold py-3.5 rounded-2xl transition">
                             السؤال التالي <i class="fa-solid fa-arrow-left mr-2"></i>
                         </button>
                     </div>
@@ -907,28 +1173,24 @@
             appContent.innerHTML = html;
         }
 
-        function checkAnswer(selectedIndex, correctIndex) {
-            const buttons = document.querySelectorAll('.quiz-btn');
+        function checkAnswer(selected, correct) {
+            const btns = document.querySelectorAll('.quiz-btn');
             const feedback = document.getElementById('feedback');
             const nextBtn = document.getElementById('next-btn');
 
-            // إيقاف الأزرار
-            buttons.forEach(btn => btn.disabled = true);
+            btns.forEach(b => b.disabled = true);
 
-            if(selectedIndex === correctIndex) {
-                buttons[selectedIndex].classList.add('bg-green-100', 'border-green-500', 'text-green-800');
-                feedback.innerHTML = '✅ إجابة صحيحة!';
-                feedback.classList.add('bg-green-50', 'text-green-700', 'block');
-                feedback.classList.remove('hidden');
+            if(selected === correct) {
+                btns[selected].classList.add('bg-emerald-500', 'text-white');
+                feedback.innerHTML = '✅ إجابة صحيحة ممتازة!';
+                feedback.className = 'mt-6 bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-300 font-bold text-base rounded-xl p-3 block';
                 score++;
             } else {
-                buttons[selectedIndex].classList.add('bg-red-100', 'border-red-500', 'text-red-800');
-                buttons[correctIndex].classList.add('bg-green-100', 'border-green-500', 'text-green-800');
+                btns[selected].classList.add('bg-rose-500', 'text-white');
+                btns[correct].classList.add('bg-emerald-500', 'text-white');
                 feedback.innerHTML = '❌ إجابة خاطئة!';
-                feedback.classList.add('bg-red-50', 'text-red-700', 'block');
-                feedback.classList.remove('hidden');
+                feedback.className = 'mt-6 bg-rose-100 text-rose-800 dark:bg-rose-900/50 dark:text-rose-300 font-bold text-base rounded-xl p-3 block';
             }
-
             nextBtn.classList.remove('hidden');
         }
 
@@ -938,46 +1200,47 @@
         }
 
         function renderQuizResults() {
+            if (score === currentQuiz.length && !completedLectures.includes(activeLectureId)) {
+                completedLectures.push(activeLectureId);
+                localStorage.setItem('nurse_hub_completed', JSON.stringify(completedLectures));
+            }
+
             let html = `
-                <div class="fade-in max-w-lg mx-auto mt-20 text-center bg-white rounded-2xl shadow-lg p-10 border border-gray-100">
-                    <div class="text-6xl mb-4">${score === currentQuiz.length ? '🏆' : '👍'}</div>
-                    <h2 class="text-3xl font-bold text-gray-800 mb-2">اكتمل الاختبار!</h2>
-                    <p class="text-gray-500 mb-6">نتيجتك النهائية هي:</p>
-                    <div class="text-5xl font-extrabold text-medical-600 mb-8" dir="ltr">
-                        ${score} / ${currentQuiz.length}
-                    </div>
-                    <div class="flex flex-col space-y-3">
-                        <button onclick="startQuiz('${activeLectureId}')" class="bg-gray-100 hover:bg-gray-200 text-gray-800 py-3 rounded-xl font-bold transition">
-                            <i class="fa-solid fa-rotate-right ml-2"></i> إعادة الاختبار
-                        </button>
-                        <button onclick="renderLecture('${activeLectureId}')" class="bg-medical-500 hover:bg-medical-600 text-white py-3 rounded-xl font-bold transition">
-                            <i class="fa-solid fa-book ml-2"></i> العودة للمحاضرة
-                        </button>
+                <div class="fade-in max-w-md mx-auto py-12 text-center">
+                    <div class="bg-white dark:bg-slate-800 rounded-3xl p-8 shadow-xl border border-gray-100 dark:border-slate-700">
+                        <div class="text-6xl mb-4">${score === currentQuiz.length ? '🏆' : '🎉'}</div>
+                        <h2 class="text-2xl font-black text-gray-900 dark:text-white mb-2">أحسنت! أكملت الاختبار</h2>
+                        <p class="text-gray-500 text-sm mb-6">درجتك النهائية هي:</p>
+
+                        <div class="text-5xl font-black text-medical-500 mb-8" dir="ltr">${score} / ${currentQuiz.length}</div>
+
+                        <div class="space-y-3">
+                            <button onclick="startQuiz('${activeLectureId}')" class="w-full bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 text-gray-800 dark:text-gray-200 font-bold py-3.5 rounded-2xl transition">
+                                <i class="fa-solid fa-rotate-right ml-2"></i> إعادة الاختبار
+                            </button>
+                            <button onclick="renderLecture('${activeLectureId}')" class="w-full bg-medical-500 hover:bg-medical-600 text-white font-bold py-3.5 rounded-2xl transition">
+                                العودة للمحاضرة
+                            </button>
+                        </div>
                     </div>
                 </div>
             `;
             appContent.innerHTML = html;
         }
 
-
-        // ---------------------------------------------------------
-        // 4. لعبة المصطلحات (Vocabulary Game)
-        // ---------------------------------------------------------
         let gameTerms = [];
         let gameScore = 0;
-        let gameStreak = 0;
         let gameLives = 3;
         let currentGameTerm = null;
 
         function startGame(lectureId) {
             activeLectureId = lectureId;
-            gameTerms = data.lectureDetails[lectureId].terms;
-            if(gameTerms.length < 4) {
-                alert("اللعبة تتطلب وجود 4 مصطلحات على الأقل في المحاضرة.");
+            gameTerms = data.lectureDetails[lectureId].terms || [];
+            if(gameTerms.length < 3) {
+                alert('تتطلب هذه اللعبة وجود 3 مصطلحات على الأقل.');
                 return;
             }
             gameScore = 0;
-            gameStreak = 0;
             gameLives = 3;
             renderGameScreen();
         }
@@ -988,43 +1251,28 @@
                 return;
             }
 
-            // اختيار مصطلح عشوائي
             currentGameTerm = gameTerms[Math.floor(Math.random() * gameTerms.length)];
-            
-            // اختيار 3 إجابات خاطئة
-            let distractors = gameTerms.filter(t => t.en !== currentGameTerm.en);
-            // خلط الإجابات الخاطئة وأخذ 3
-            distractors = distractors.sort(() => 0.5 - Math.random()).slice(0, 3);
-            
-            // دمج الصح مع الخطأ وخلطهم
+            let distractors = gameTerms.filter(t => t.en !== currentGameTerm.en).sort(() => 0.5 - Math.random()).slice(0, 3);
             let options = [...distractors, currentGameTerm].sort(() => 0.5 - Math.random());
 
             let html = `
-                <div class="fade-in max-w-3xl mx-auto mt-6">
-                    <div class="flex justify-between items-center mb-6 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-                        <button onclick="renderLecture('${activeLectureId}')" class="text-gray-500 hover:text-red-500 font-bold">
-                            <i class="fa-solid fa-times"></i> خروج
-                        </button>
-                        <div class="flex space-x-6 space-x-reverse font-bold text-lg">
-                            <div class="text-orange-500" title="Streak"><i class="fa-solid fa-fire"></i> ${gameStreak}</div>
-                            <div class="text-medical-600" title="Score"><i class="fa-solid fa-star"></i> ${gameScore}</div>
-                            <div class="text-red-500" title="Lives">
-                                ${Array(gameLives).fill('<i class="fa-solid fa-heart"></i>').join(' ')}
-                            </div>
+                <div class="fade-in max-w-2xl mx-auto py-8">
+                    <div class="flex justify-between items-center mb-6 bg-white dark:bg-slate-800 p-4 rounded-2xl border border-gray-100 dark:border-slate-700">
+                        <button onclick="renderLecture('${activeLectureId}')" class="text-gray-400 hover:text-rose-500 font-bold text-sm">إلغاء</button>
+                        <div class="flex items-center space-x-6 space-x-reverse font-black">
+                            <span class="text-amber-500"><i class="fa-solid fa-star ml-1"></i>${gameScore}</span>
+                            <span class="text-rose-500">${Array(gameLives).fill('<i class="fa-solid fa-heart"></i>').join(' ')}</span>
                         </div>
                     </div>
 
-                    <div class="bg-gradient-to-br from-medical-800 to-medical-600 rounded-3xl shadow-xl p-10 text-center mb-8 relative overflow-hidden">
-                        <div class="absolute top-0 right-0 opacity-10 text-9xl transform translate-x-1/4 -translate-y-1/4">
-                            <i class="fa-solid fa-brain"></i>
-                        </div>
-                        <h3 class="text-medical-100 mb-2 font-semibold">ما هو المعنى الصحيح لـ:</h3>
-                        <h2 class="text-5xl font-extrabold text-white tracking-wider" dir="ltr">${currentGameTerm.en}</h2>
+                    <div class="bg-gradient-to-br from-amber-500 to-orange-600 text-white rounded-3xl p-8 text-center mb-6 shadow-lg">
+                        <span class="text-xs font-bold uppercase tracking-wider opacity-80 mb-2 block">ما هي الترجمة الصحيحة لـ:</span>
+                        <h2 class="text-4xl font-black" dir="ltr">${currentGameTerm.en}</h2>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         ${options.map(opt => `
-                            <button onclick="checkGameAnswer('${opt.en}', this)" class="game-btn bg-white hover:bg-gray-50 border-2 border-gray-200 text-gray-800 font-bold text-xl py-6 rounded-2xl shadow-sm transition transform hover:-translate-y-1 hover:border-medical-400">
+                            <button onclick="checkGameAnswer('${opt.en}')" class="bg-white dark:bg-slate-800 hover:border-amber-500 border-2 border-gray-100 dark:border-slate-700 p-5 rounded-2xl font-bold text-lg text-gray-800 dark:text-gray-100 shadow-sm transition">
                                 ${opt.ar}
                             </button>
                         `).join('')}
@@ -1034,77 +1282,147 @@
             appContent.innerHTML = html;
         }
 
-        function checkGameAnswer(selectedEn, btnElement) {
-            const buttons = document.querySelectorAll('.game-btn');
-            buttons.forEach(b => b.disabled = true); // منع النقر المتعدد
-
-            if(selectedEn === currentGameTerm.en) {
-                // صح
-                btnElement.classList.remove('border-gray-200', 'text-gray-800');
-                btnElement.classList.add('bg-green-500', 'border-green-600', 'text-white');
-                
-                gameStreak++;
-                gameScore += (10 + gameStreak * 2); // نقاط إضافية مع الستريك
-                
-                setTimeout(() => {
-                    renderGameScreen();
-                }, 800);
+        function checkGameAnswer(selectedEn) {
+            if (selectedEn === currentGameTerm.en) {
+                gameScore += 10;
             } else {
-                // خطأ
-                btnElement.classList.remove('border-gray-200', 'text-gray-800');
-                btnElement.classList.add('bg-red-500', 'border-red-600', 'text-white');
-                
-                // تلوين الإجابة الصحيحة
-                buttons.forEach(b => {
-                    if(b.innerText.includes(currentGameTerm.ar)) {
-                        b.classList.remove('border-gray-200');
-                        b.classList.add('bg-green-100', 'border-green-500');
-                    }
-                });
-
-                gameStreak = 0;
                 gameLives--;
-                
-                setTimeout(() => {
-                    renderGameScreen();
-                }, 1500);
             }
+            renderGameScreen();
         }
 
         function renderGameOver() {
             let html = `
-                <div class="fade-in max-w-md mx-auto mt-20 text-center bg-white rounded-3xl shadow-2xl p-10 border border-gray-100">
-                    <div class="text-7xl mb-6">💔</div>
-                    <h2 class="text-4xl font-black text-gray-800 mb-2">Game Over</h2>
-                    <p class="text-gray-500 mb-6">لقد نفدت محاولاتك!</p>
-                    
-                    <div class="bg-gray-50 rounded-xl p-6 mb-8 border border-gray-200">
-                        <div class="text-sm text-gray-500 mb-1">النقاط النهائية</div>
-                        <div class="text-5xl font-extrabold text-orange-500 flex justify-center items-center">
-                            ${gameScore} <i class="fa-solid fa-star text-3xl ml-2 mb-1"></i>
-                        </div>
+                <div class="fade-in max-w-sm mx-auto py-12 text-center">
+                    <div class="bg-white dark:bg-slate-800 rounded-3xl p-8 shadow-xl border border-gray-100 dark:border-slate-700">
+                        <div class="text-6xl mb-4">💔</div>
+                        <h2 class="text-2xl font-black text-gray-900 dark:text-white mb-2">انتهت المحاولات!</h2>
+                        <p class="text-gray-500 text-sm mb-6">النقاط التي جمعتها:</p>
+                        <div class="text-5xl font-black text-amber-500 mb-8">${gameScore}</div>
+                        <button onclick="startGame('${activeLectureId}')" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-3.5 rounded-2xl transition">
+                            لعب مرة أخرى
+                        </button>
                     </div>
-                    
-                    <button onclick="startGame('${activeLectureId}')" class="w-full bg-medical-500 hover:bg-medical-600 text-white py-4 rounded-xl font-bold text-lg transition mb-3">
-                        <i class="fa-solid fa-rotate-right ml-2"></i> العب مرة أخرى
-                    </button>
-                    <button onclick="renderLecture('${activeLectureId}')" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 py-3 rounded-xl font-bold transition">
-                        العودة للمحاضرة
-                    </button>
                 </div>
             `;
             appContent.innerHTML = html;
         }
 
-        // ---------------------------------------------------------
-        // 5. تهيئة التطبيق عند البداية
-        // ---------------------------------------------------------
+
+        // Hangman Game (Save the patient)
+        let hangmanWord = "";
+        let hangmanHint = "";
+        let hangmanGuessed = [];
+        let hangmanLives = 6;
+
+        function startHangman(lectureId) {
+            activeLectureId = lectureId;
+            const terms = data.lectureDetails[lectureId].terms || [];
+            if(terms.length === 0) return;
+            
+            const term = terms[Math.floor(Math.random() * terms.length)];
+            hangmanWord = term.en.toUpperCase();
+            hangmanHint = term.ar;
+            hangmanGuessed = [];
+            hangmanLives = 6;
+            renderHangman();
+        }
+
+        function renderHangman() {
+            let displayWord = hangmanWord.split('').map(char => {
+                if (char === ' ' || char === '-') return char;
+                return hangmanGuessed.includes(char) ? char : '_';
+            }).join(' ');
+
+            let isWon = !displayWord.includes('_');
+            let isLost = hangmanLives <= 0;
+
+            const keyboardRows = ['QWERTYUIOP', 'ASDFGHJKL', 'ZXCVBNM'];
+
+            let html = `
+                <div class="fade-in max-w-3xl mx-auto py-8">
+                    <div class="flex justify-between items-center mb-6 bg-white dark:bg-slate-800 p-4 rounded-2xl border border-gray-100 dark:border-slate-700">
+                        <button onclick="renderLecture('${activeLectureId}')" class="text-gray-400 hover:text-rose-500 font-bold text-sm">
+                            <i class="fa-solid fa-arrow-right ml-1"></i> العودة للمحاضرة
+                        </button>
+                        <div class="flex items-center font-black text-rose-500 text-lg">
+                            ${Array(hangmanLives).fill('<i class="fa-solid fa-heart ml-1"></i>').join('')}
+                            ${Array(6 - hangmanLives).fill('<i class="fa-solid fa-heart-crack text-gray-300 dark:text-gray-600 ml-1"></i>').join('')}
+                        </div>
+                    </div>
+
+                    <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 md:p-10 text-center shadow-md border border-gray-100 dark:border-slate-700 mb-6">
+                        <h2 class="text-2xl font-black text-medical-900 dark:text-white mb-2">لعبة إنقاذ المريض 🚑</h2>
+                        <p class="text-gray-500 text-sm mb-8">خمن الحروف الإنجليزية لمعنى: <span class="font-bold text-rose-600">${hangmanHint}</span></p>
+                        
+                        <div class="text-3xl md:text-5xl font-black text-gray-800 dark:text-gray-100 tracking-[0.25em] mb-10 overflow-x-auto pb-4" dir="ltr">
+                            ${displayWord}
+                        </div>
+
+                        ${isWon ? `
+                            <div class="bg-emerald-100 text-emerald-700 p-4 rounded-2xl font-bold mb-6">نجحت في إنقاذ المريض! المعنى الإنجليزي صحيح.</div>
+                            <button onclick="startHangman('${activeLectureId}')" class="bg-rose-500 hover:bg-rose-600 text-white font-bold py-3 px-6 rounded-xl transition">إنقاذ مريض آخر</button>
+                        ` : isLost ? `
+                            <div class="bg-rose-100 text-rose-700 p-4 rounded-2xl font-bold mb-6">للأسف فقدنا المريض! الكلمة كانت: ${hangmanWord}</div>
+                            <button onclick="startHangman('${activeLectureId}')" class="bg-rose-500 hover:bg-rose-600 text-white font-bold py-3 px-6 rounded-xl transition">حاول مرة أخرى</button>
+                        ` : `
+                            <div class="space-y-3" dir="ltr">
+                                ${keyboardRows.map(row => `
+                                    <div class="flex justify-center gap-1.5 md:gap-2">
+                                        ${row.split('').map(letter => `
+                                            <button onclick="guessHangmanLetter('${letter}')" 
+                                                ${hangmanGuessed.includes(letter) ? 'disabled' : ''}
+                                                class="w-8 h-10 md:w-11 md:h-12 rounded-lg font-bold text-sm md:text-base shadow-sm transition
+                                                ${hangmanGuessed.includes(letter) 
+                                                    ? (hangmanWord.includes(letter) ? 'bg-emerald-500 text-white border-transparent' : 'bg-gray-200 dark:bg-slate-700 text-gray-400 border-transparent') 
+                                                    : 'bg-white dark:bg-slate-700 border-2 border-gray-200 dark:border-slate-600 text-gray-800 dark:text-gray-200 hover:bg-rose-50 hover:border-rose-300 dark:hover:border-rose-500'}">
+                                                ${letter}
+                                            </button>
+                                        `).join('')}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        `}
+                    </div>
+                </div>
+            `;
+            appContent.innerHTML = html;
+        }
+
+        function guessHangmanLetter(letter) {
+            if (hangmanGuessed.includes(letter)) return;
+            hangmanGuessed.push(letter);
+            if (!hangmanWord.includes(letter)) {
+                hangmanLives--;
+            }
+            renderHangman();
+        }
+
+        function showWelcomeModal() {
+            if (!sessionStorage.getItem('welcomeMessageShown')) {
+                const modal = document.getElementById('welcome-modal');
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0');
+                }, 10);
+                sessionStorage.setItem('welcomeMessageShown', 'true');
+            }
+        }
+
+        function closeWelcomeModal() {
+            const modal = document.getElementById('welcome-modal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300);
+        }
+
         window.onload = () => {
             renderHome();
-            // تشغيل رسالة الترحيب بعد تحميل الصفحة بنصف ثانية
             setTimeout(showWelcomeModal, 500);
         };
-
     </script>
 </body>
 </html>
